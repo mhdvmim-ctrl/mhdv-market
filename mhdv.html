@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAMO - Erkaklar Kiyim Do'koni</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #c9a96e;
+  --accent2: #e8c17a;
+  --accent-glow: rgba(201,169,110,0.35);
+  --green: #3ecf8e;
+  --green-glow: rgba(62,207,142,0.25);
+  --red: #f04040;
+  --red-glow: rgba(240,64,64,0.2);
+  --blue: #4f8ef7;
+  --text-primary: #ffffff;
+  --text-secondary: #b8b8c0;
+  --text-muted: #6a6a75;
+  --bg-primary: #080810;
+  --bg-secondary: #12121c;
+  --bg-card: rgba(20,20,32,0.9);
+  --border: rgba(201,169,110,0.15);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --layout: normal;
+  --font-size-base: 1rem;
+}
+
+[data-theme="light"] {
+  --text-primary: #111118;
+  --text-secondary: #44445a;
+  --text-muted: #888899;
+  --bg-primary: #f4f3ef;
+  --bg-secondary: #e8e7e2;
+  --bg-card: rgba(255,255,255,0.95);
+  --border: rgba(180,150,90,0.25);
+  --shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+[data-theme="blue"] {
+  --accent: #60b4ff;
+  --accent2: #90d0ff;
+  --accent-glow: rgba(96,180,255,0.3);
+  --bg-primary: #05080f;
+  --bg-secondary: #0a1020;
+  --border: rgba(96,180,255,0.15);
+}
+
+[data-theme="green"] {
+  --accent: #3ecf8e;
+  --accent2: #60e0a0;
+  --accent-glow: rgba(62,207,142,0.3);
+  --bg-primary: #050f0a;
+  --bg-secondary: #091808;
+  --border: rgba(62,207,142,0.15);
+}
+
+[data-layout="compact"] { --font-size-base: 0.88rem; }
+[data-layout="compact"] .grid { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)) !important; gap:10px !important; }
+[data-layout="spacious"] { --font-size-base: 1.05rem; }
+[data-layout="spacious"] .grid { grid-template-columns: repeat(auto-fill,minmax(260px,1fr)) !important; gap:20px !important; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg-primary);
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(201,169,110,0.04) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 20%, rgba(62,207,142,0.03) 0%, transparent 50%);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius:99px; }
+
+/* ===== HEADER ===== */
+header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 5%; background: rgba(8,8,16,0.7);
+  backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+  position:sticky; top:0; z-index:500;
+}
+[data-theme="light"] header { background: rgba(244,243,239,0.85); }
+
+#logo {
+  font-family: var(--font-display); font-size:1.9rem; font-weight:700;
+  letter-spacing:0.18em; color:var(--accent); cursor:pointer;
+  transition:all 0.3s; position:relative;
+  text-shadow: 0 0 20px var(--accent-glow);
+}
+#logo:hover { letter-spacing:0.25em; }
+
+.header-right { display:flex; gap:8px; align-items:center; }
+.header-btn {
+  padding:7px 13px; border-radius:20px;
+  border:1px solid var(--border); background:rgba(255,255,255,0.05);
+  color:var(--text-secondary); font-size:0.78rem; font-family:var(--font-body);
+  cursor:pointer; transition:all 0.25s; white-space:nowrap;
+}
+.header-btn:hover { background:rgba(201,169,110,0.12); color:var(--accent); border-color:var(--accent); }
+.header-btn.active { background:var(--accent); color:#000; border-color:var(--accent); }
+
+/* ===== PROMO BANNER ===== */
+#promo-bar {
+  background: linear-gradient(90deg, rgba(201,169,110,0.08), rgba(201,169,110,0.15), rgba(201,169,110,0.08));
+  border-bottom:1px solid var(--border); padding:6px 5%;
+  font-size:0.78rem; color:var(--accent); text-align:center;
+  display:none;
+}
+
+/* ===== MAIN ===== */
+main { padding:20px 5%; }
+
+/* ===== FILTERS ===== */
+.filter-track {
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;
+  padding:14px 16px; background:rgba(255,255,255,0.02);
+  border-radius:var(--radius); border:1px solid var(--border);
+}
+.filter-btn {
+  padding:7px 16px; border-radius:20px;
+  border:1px solid var(--border); background:transparent;
+  color:var(--text-secondary); font-size:0.8rem; font-family:var(--font-body);
+  cursor:pointer; transition:all 0.25s;
+}
+.filter-btn:hover { color:var(--accent); border-color:var(--accent); }
+.filter-btn.active { background:var(--accent); color:#000; border-color:var(--accent); font-weight:600; }
+
+/* ===== PRODUCT GRID ===== */
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+.product-card {
+  background:var(--bg-card); border-radius:var(--radius); overflow:hidden;
+  cursor:pointer; transition:all 0.3s; border:1px solid var(--border);
+  position:relative;
+}
+.product-card:hover { transform:translateY(-5px); border-color:var(--accent); box-shadow:0 12px 30px var(--accent-glow); }
+.product-img {
+  width:100%; aspect-ratio:1; background:var(--bg-secondary);
+  display:flex; align-items:center; justify-content:center;
+  font-size:3rem; overflow:hidden; position:relative;
+}
+.product-img img { width:100%; height:100%; object-fit:cover; }
+.product-img-placeholder { font-size:3rem; }
+.product-badge {
+  position:absolute; top:8px; right:8px;
+  padding:3px 8px; border-radius:20px; font-size:0.65rem; font-weight:700;
+}
+.badge-new { background:var(--accent); color:#000; }
+.badge-hot { background:var(--red); color:#fff; }
+.product-info { padding:12px; }
+.product-cat { font-size:0.68rem; color:var(--text-muted); margin-bottom:2px; }
+.product-name { font-weight:600; font-size:0.88rem; margin-bottom:4px; line-height:1.3; }
+.product-price { color:var(--green); font-weight:700; font-size:0.95rem; }
+.product-old-price { color:var(--text-muted); font-size:0.75rem; text-decoration:line-through; margin-left:6px; }
+.product-actions { display:flex; gap:6px; margin-top:8px; }
+.like-btn {
+  padding:4px 10px; border-radius:20px; border:1px solid var(--border);
+  background:rgba(240,64,64,0.07); color:var(--text-muted); font-size:0.75rem;
+  cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:4px;
+}
+.like-btn:hover, .like-btn.liked { background:rgba(240,64,64,0.2); color:#f04040; border-color:#f04040; }
+.send-admin-btn {
+  padding:4px 10px; border-radius:20px; border:1px solid var(--border);
+  background:rgba(201,169,110,0.07); color:var(--text-muted); font-size:0.75rem;
+  cursor:pointer; transition:all 0.2s;
+}
+.send-admin-btn:hover { background:rgba(201,169,110,0.15); color:var(--accent); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
+  display:none; align-items:center; justify-content:center;
+  z-index:2000; padding:16px;
+}
+.modal-overlay.active { display:flex; }
+.modal-box {
+  background:var(--bg-secondary); border-radius:var(--radius);
+  padding:24px; max-width:900px; width:100%; max-height:90vh;
+  overflow-y:auto; border:1px solid var(--border);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  animation:modalIn 0.25s ease;
+}
+@keyframes modalIn { from{transform:scale(0.95);opacity:0} to{transform:scale(1);opacity:1} }
+
+.modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.modal-title { font-family:var(--font-display); font-size:1.4rem; color:var(--accent); letter-spacing:0.05em; }
+.modal-close { background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; line-height:1; padding:4px; transition:color 0.2s; }
+.modal-close:hover { color:var(--text-primary); }
+
+/* ===== FORMS ===== */
+.form-group { margin-bottom:14px; }
+.form-label { display:block; font-size:0.78rem; color:var(--text-secondary); margin-bottom:5px; font-weight:600; letter-spacing:0.03em; }
+.form-input, .form-select, textarea {
+  width:100%; padding:10px 13px;
+  background:rgba(255,255,255,0.04); border:1px solid var(--border);
+  border-radius:var(--radius-sm); color:var(--text-primary);
+  font-size:0.88rem; font-family:var(--font-body); transition:all 0.2s;
+}
+.form-input:focus, .form-select:focus, textarea:focus {
+  outline:none; border-color:var(--accent); background:rgba(201,169,110,0.05);
+}
+.form-select option { background:var(--bg-secondary); }
+[data-theme="light"] .form-input, [data-theme="light"] .form-select, [data-theme="light"] textarea {
+  background:rgba(0,0,0,0.04);
+}
+
+/* ===== BUTTONS ===== */
+.btn { padding:10px 18px; border:none; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; transition:all 0.25s; font-size:0.85rem; font-family:var(--font-body); display:inline-flex; align-items:center; gap:6px; }
+.btn-primary { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#000; }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 20px var(--accent-glow); }
+.btn-ghost { background:rgba(255,255,255,0.06); color:var(--text-secondary); border:1px solid var(--border); }
+.btn-ghost:hover { background:rgba(201,169,110,0.1); color:var(--accent); border-color:var(--accent); }
+.btn-danger { background:rgba(240,64,64,0.1); color:var(--red); border:1px solid rgba(240,64,64,0.25); }
+.btn-danger:hover { background:rgba(240,64,64,0.2); }
+.btn-green { background:rgba(62,207,142,0.1); color:var(--green); border:1px solid rgba(62,207,142,0.25); }
+.btn-green:hover { background:rgba(62,207,142,0.2); }
+.btn-sm { padding:5px 10px; font-size:0.75rem; }
+.btn-full { width:100%; justify-content:center; }
+
+/* ===== TABS ===== */
+.tabs { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+.tab { padding:7px 14px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text-secondary); font-size:0.78rem; cursor:pointer; transition:all 0.2s; font-family:var(--font-body); }
+.tab.active { background:var(--accent); color:#000; border-color:var(--accent); font-weight:600; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* ===== SECTION: CHAT ===== */
+#section-chat { max-width:780px; margin:0 auto; }
+.chat-setup-card { background:var(--bg-card); border-radius:var(--radius); padding:28px; border:1px solid var(--border); max-width:440px; margin:0 auto; }
+
+/* User chat with 3 sections */
+.user-chat-wrapper { background:var(--bg-card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+.user-chat-tabs { display:flex; border-bottom:1px solid var(--border); }
+.uchat-tab { flex:1; padding:12px 8px; text-align:center; font-size:0.8rem; cursor:pointer; background:transparent; border:none; color:var(--text-muted); font-family:var(--font-body); transition:all 0.2s; border-bottom:2px solid transparent; }
+.uchat-tab.active { color:var(--accent); border-bottom-color:var(--accent); background:rgba(201,169,110,0.05); }
+.uchat-panel { display:none; }
+.uchat-panel.active { display:flex; flex-direction:column; height:420px; }
+
+/* Messages */
+.messages-area { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
+.msg { padding:9px 12px; border-radius:var(--radius-sm); max-width:80%; font-size:0.83rem; line-height:1.5; }
+.msg.self { background:rgba(201,169,110,0.12); border:1px solid rgba(201,169,110,0.2); align-self:flex-end; }
+.msg.other { background:rgba(255,255,255,0.06); border:1px solid var(--border); align-self:flex-start; }
+.msg.admin { background:rgba(62,207,142,0.1); border:1px solid rgba(62,207,142,0.2); align-self:flex-start; }
+.msg.channel-post { background:rgba(79,142,247,0.1); border:1px solid rgba(79,142,247,0.2); border-radius:var(--radius); width:100%; max-width:100%; }
+.msg-meta { font-size:0.68rem; color:var(--text-muted); margin-bottom:3px; display:flex; align-items:center; gap:6px; }
+.msg-time { font-size:0.65rem; color:var(--text-muted); text-align:right; margin-top:2px; }
+.msg-media { max-width:200px; border-radius:8px; margin-top:6px; }
+
+.chat-input-bar { display:flex; gap:8px; padding:12px; border-top:1px solid var(--border); background:rgba(0,0,0,0.2); }
+.chat-input-bar .form-input { margin:0; flex:1; }
+
+/* Channel: no input for users */
+.channel-readonly { padding:10px 14px; background:rgba(79,142,247,0.07); border-top:1px solid rgba(79,142,247,0.15); font-size:0.75rem; color:var(--text-muted); text-align:center; }
+
+/* Product search panel in chat */
+.product-search-panel { position:absolute; bottom:60px; left:0; right:0; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); padding:12px; max-height:260px; overflow-y:auto; z-index:10; box-shadow:var(--shadow); }
+.product-search-item { display:flex; align-items:center; gap:10px; padding:8px; border-radius:8px; cursor:pointer; transition:background 0.2s; }
+.product-search-item:hover { background:rgba(201,169,110,0.08); }
+.product-search-item .emoji { font-size:1.5rem; width:36px; text-align:center; }
+.product-search-item img { width:36px; height:36px; border-radius:6px; object-fit:cover; }
+
+/* ===== ADMIN PANEL ===== */
+.admin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; margin-bottom:16px; }
+.stat-card { background:rgba(255,255,255,0.04); border-radius:var(--radius-sm); padding:14px; text-align:center; border:1px solid var(--border); }
+.stat-num { font-size:1.8rem; font-weight:700; font-family:var(--font-display); }
+.stat-label { font-size:0.72rem; color:var(--text-muted); margin-top:2px; }
+
+.product-list-item {
+  padding:12px; background:rgba(255,255,255,0.03); margin-bottom:8px;
+  border-radius:var(--radius-sm); display:flex; align-items:center;
+  gap:12px; border:1px solid var(--border); transition:border-color 0.2s;
+}
+.product-list-item:hover { border-color:var(--accent); }
+.product-thumb { width:46px; height:46px; border-radius:8px; background:var(--bg-primary); display:flex; align-items:center; justify-content:center; font-size:1.4rem; overflow:hidden; flex-shrink:0; }
+.product-thumb img { width:100%; height:100%; object-fit:cover; }
+.product-list-info { flex:1; min-width:0; }
+.product-list-name { font-weight:600; font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.product-list-price { font-size:0.78rem; color:var(--green); }
+.product-list-meta { font-size:0.72rem; color:var(--text-muted); }
+.product-actions-bar { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+
+/* Image upload area */
+.img-upload-area {
+  border:2px dashed var(--border); border-radius:var(--radius);
+  padding:20px; text-align:center; cursor:pointer; transition:all 0.25s;
+}
+.img-upload-area:hover { border-color:var(--accent); background:rgba(201,169,110,0.04); }
+.img-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:8px; margin-top:10px; }
+.img-preview { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:1; }
+.img-preview img { width:100%; height:100%; object-fit:cover; }
+.img-preview .rm-img { position:absolute; top:2px; right:2px; background:rgba(240,64,64,0.8); color:#fff; border:none; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+
+/* Category buttons in add product */
+.cat-btns { display:flex; gap:6px; flex-wrap:wrap; }
+.cat-btn { padding:6px 12px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-secondary); font-size:0.78rem; cursor:pointer; transition:all 0.2s; font-family:var(--font-body); }
+.cat-btn.active { background:var(--accent); color:#000; border-color:var(--accent); }
+
+/* Admin chat panel */
+.admin-chat-layout { display:grid; grid-template-columns:220px 1fr; gap:12px; height:380px; }
+.admin-chat-sidebar { background:rgba(0,0,0,0.3); border-radius:var(--radius-sm); overflow-y:auto; border:1px solid var(--border); }
+.admin-chat-sidebar-tabs { display:flex; border-bottom:1px solid var(--border); }
+.acs-tab { flex:1; padding:9px 4px; text-align:center; font-size:0.72rem; cursor:pointer; background:transparent; border:none; color:var(--text-muted); font-family:var(--font-body); transition:all 0.2s; }
+.acs-tab.active { color:var(--accent); background:rgba(201,169,110,0.07); }
+.admin-chat-main { display:flex; flex-direction:column; background:rgba(0,0,0,0.3); border-radius:var(--radius-sm); border:1px solid var(--border); }
+.admin-chat-header { padding:10px 14px; border-bottom:1px solid var(--border); font-size:0.82rem; font-weight:600; color:var(--accent); }
+.customer-item { padding:10px 12px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.15s; font-size:0.8rem; }
+.customer-item:hover { background:rgba(255,255,255,0.04); }
+.customer-item.active { background:rgba(201,169,110,0.1); border-left:2px solid var(--accent); }
+.customer-name { font-weight:600; font-size:0.82rem; }
+.customer-preview { font-size:0.7rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.unread-badge { background:var(--accent); color:#000; font-size:0.6rem; font-weight:700; border-radius:99px; padding:1px 5px; }
+
+/* Design tab */
+.design-themes { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.theme-card { padding:14px 8px; border-radius:var(--radius-sm); border:2px solid transparent; cursor:pointer; text-align:center; font-size:0.75rem; transition:all 0.2s; }
+.theme-card.active { border-color:var(--accent); }
+
+/* ===== MANAGER EXTRA PANELS ===== */
+.mgr-tab-panel { display:none; }
+.mgr-tab-panel.active { display:block; }
+
+/* Ads / Reklama */
+.ad-card { background:rgba(255,255,255,0.03); border-radius:var(--radius-sm); padding:14px; margin-bottom:10px; border:1px solid var(--border); }
+.ad-card-img { width:100%; height:80px; border-radius:8px; object-fit:cover; background:var(--bg-primary); margin-bottom:8px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.75rem; }
+
+/* Cloud */
+.cloud-item { display:flex; align-items:center; gap:10px; padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:8px; }
+.cloud-icon { font-size:1.5rem; width:36px; text-align:center; }
+.cloud-name { font-size:0.82rem; font-weight:600; }
+.cloud-size { font-size:0.7rem; color:var(--text-muted); }
+
+/* Color picker row */
+.color-row { display:flex; gap:8px; align-items:center; }
+.color-swatch { width:32px; height:32px; border-radius:8px; cursor:pointer; border:2px solid transparent; transition:all 0.2s; }
+.color-swatch.active { border-color:var(--text-primary); transform:scale(1.15); }
+
+/* ===== NOTIFICATION BADGE ===== */
+.notif-dot { display:inline-block; width:7px; height:7px; background:var(--red); border-radius:50%; margin-left:4px; vertical-align:middle; }
+
+/* ===== LOADING ===== */
+.loader { display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:0.82rem; }
+.spinner { width:16px; height:16px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ===== TOAST ===== */
+#toast-container { position:fixed; bottom:20px; right:20px; z-index:9999; display:flex; flex-direction:column; gap:8px; }
+.toast { background:var(--bg-secondary); color:var(--text-primary); padding:11px 16px; border-radius:var(--radius-sm); border:1px solid var(--border); font-size:0.82rem; font-family:var(--font-body); animation:toastIn 0.3s ease; display:flex; align-items:center; gap:8px; min-width:200px; box-shadow:var(--shadow); }
+.toast.success { border-color:var(--green); }
+.toast.error { border-color:var(--red); }
+.toast.info { border-color:var(--blue); }
+@keyframes toastIn { from{transform:translateX(120px);opacity:0} to{transform:translateX(0);opacity:1} }
+
+/* ===== EMPTY STATE ===== */
+.empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
+.empty-state .empty-icon { font-size:3rem; margin-bottom:12px; }
+.empty-state p { font-size:0.85rem; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:640px){
+  main { padding:14px 3%; }
+  header { padding:10px 3%; }
+  .grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .admin-chat-layout { grid-template-columns:1fr; height:auto; }
+  .admin-chat-sidebar { height:120px; }
+  .design-themes { grid-template-columns:repeat(2,1fr); }
+  .mgr-grid { grid-template-columns:1fr !important; }
+}
+
+/* ===== PRODUCT DETAIL MODAL ===== */
+.product-detail-imgs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.product-detail-img { width:80px; height:80px; border-radius:8px; object-fit:cover; cursor:pointer; border:2px solid transparent; transition:all 0.2s; }
+.product-detail-img.active { border-color:var(--accent); }
+.product-detail-main-img { width:100%; aspect-ratio:16/9; background:var(--bg-primary); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; font-size:4rem; overflow:hidden; margin-bottom:12px; }
+.product-detail-main-img img { width:100%; height:100%; object-fit:cover; }
+
+/* Section heading */
+.section-heading { font-family:var(--font-display); font-size:1.3rem; color:var(--accent); margin-bottom:16px; letter-spacing:0.04em; }
+
+/* divider */
+.divider { height:1px; background:var(--border); margin:16px 0; }
+
+/* tooltip */
+[data-tip] { position:relative; }
+[data-tip]:hover::after { content:attr(data-tip); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#000; color:#fff; padding:4px 8px; border-radius:6px; font-size:0.7rem; white-space:nowrap; z-index:9999; pointer-events:none; }
+</style>
+</head>
+<body data-theme="dark" data-layout="normal">
+
+<!-- PROMO BAR -->
+<div id="promo-bar"></div>
+
+<!-- HEADER -->
+<header>
+  <div id="logo">SAMO</div>
+  <div class="header-right">
+    <button class="header-btn active" id="nav-products" onclick="navTo('products')">🏠 Bosh</button>
+    <button class="header-btn" id="nav-chat" onclick="navTo('chat')">💬 Chat</button>
+    <button class="header-btn" id="nav-channel" onclick="navTo('channel')">📢 Kanal</button>
+    <button class="header-btn" id="nav-group" onclick="navTo('group')">👥 Guruh</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main id="main-content">
+
+  <!-- ===== PRODUCTS SECTION ===== -->
+  <section id="section-products">
+    <div class="filter-track" id="filter-track"></div>
+    <div class="grid" id="product-grid"></div>
+  </section>
+
+  <!-- ===== CHAT SECTION ===== -->
+  <section id="section-chat" style="display:none">
+    <!-- Step 1: user info -->
+    <div id="chat-setup" class="chat-setup-card">
+      <h2 class="section-heading">💬 Admin bilan Chat</h2>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:20px">Boshlash uchun ma'lumotlaringizni kiriting</p>
+      <div class="form-group"><label class="form-label">Ism</label><input class="form-input" id="chat-name" placeholder="Ismingiz..."/></div>
+      <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="chat-phone" placeholder="+998..." type="tel"/></div>
+      <button class="btn btn-primary btn-full" onclick="startUserChat()">💬 Chatni boshlash</button>
+    </div>
+    <!-- Step 2: chat messages -->
+    <div id="chat-active" style="display:none">
+      <button class="btn btn-ghost btn-sm" onclick="navTo('products')" style="margin-bottom:14px">← Orqaga</button>
+      <div class="user-chat-wrapper" style="position:relative">
+        <div class="user-chat-tabs">
+          <button class="uchat-tab active" onclick="switchUTab('direct')" id="utab-direct">💬 Admin bilan</button>
+          <button class="uchat-tab" onclick="switchUTab('group')" id="utab-group">👥 Guruh</button>
+          <button class="uchat-tab" onclick="switchUTab('channel')" id="utab-channel">📢 Kanal</button>
+        </div>
+
+        <!-- Direct -->
+        <div class="uchat-panel active" id="upanel-direct">
+          <div class="messages-area" id="direct-msgs"></div>
+          <div style="position:relative">
+            <div id="product-picker" style="display:none" class="product-search-panel">
+              <div style="margin-bottom:8px"><input class="form-input" id="product-search-input" placeholder="Mahsulot qidiring..." oninput="filterProductPicker()"/></div>
+              <div id="product-picker-list"></div>
+            </div>
+            <div class="chat-input-bar">
+              <button class="btn btn-ghost btn-sm" onclick="toggleProductPicker()" data-tip="Mahsulot yuborish">📦</button>
+              <input class="form-input" id="direct-input" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')sendDirectMsg()"/>
+              <button class="btn btn-primary btn-sm" onclick="sendDirectMsg()">📤</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group -->
+        <div class="uchat-panel" id="upanel-group">
+          <div class="messages-area" id="group-msgs"></div>
+          <div class="chat-input-bar">
+            <input class="form-input" id="group-input" placeholder="Guruhga yozing..." onkeydown="if(event.key==='Enter')sendGroupMsg()"/>
+            <button class="btn btn-primary btn-sm" onclick="sendGroupMsg()">📤</button>
+          </div>
+        </div>
+
+        <!-- Channel (read-only) -->
+        <div class="uchat-panel" id="upanel-channel">
+          <div class="messages-area" id="channel-msgs-user"></div>
+          <div class="channel-readonly">📢 Bu kanal — faqat admin post qo'yadi</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GROUP SECTION (direct from nav) ===== -->
+  <section id="section-group" style="display:none">
+    <div class="user-chat-wrapper">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-weight:600;color:var(--accent)">👥 Umumiy Guruh</div>
+      <div class="messages-area" id="group-msgs-main" style="height:400px"></div>
+      <div id="group-login-prompt" style="padding:14px;text-align:center;display:none">
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:10px">Yozish uchun ro'yxatdan o'ting</p>
+        <button class="btn btn-primary btn-sm" onclick="navTo('chat')">Kirish</button>
+      </div>
+      <div id="group-input-bar" class="chat-input-bar" style="display:none">
+        <input class="form-input" id="group-main-input" placeholder="Guruhga yozing..." onkeydown="if(event.key==='Enter')sendGroupMain()"/>
+        <button class="btn btn-primary btn-sm" onclick="sendGroupMain()">📤</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CHANNEL SECTION (read-only for users) ===== -->
+  <section id="section-channel" style="display:none">
+    <div class="user-chat-wrapper">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-weight:600;color:var(--blue)">📢 Kanal</div>
+      <div class="messages-area" id="channel-msgs-main" style="height:400px"></div>
+      <div class="channel-readonly">📢 Faqat admin va boshqaruvchi post qo'ya oladi</div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================= PRODUCT DETAIL MODAL ============================= -->
+<div class="modal-overlay" id="product-detail-modal">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="detail-name">Mahsulot</h3>
+      <button class="modal-close" onclick="closeModal('product-detail-modal')">✕</button>
+    </div>
+    <div id="detail-main-img" class="product-detail-main-img"><span id="detail-emoji">📦</span></div>
+    <div id="detail-imgs" class="product-detail-imgs"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+      <span id="detail-price" style="color:var(--green);font-size:1.2rem;font-weight:700"></span>
+      <span id="detail-old-price" style="color:var(--text-muted);text-decoration:line-through;font-size:0.88rem"></span>
+    </div>
+    <p id="detail-desc" style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:12px"></p>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px" id="detail-cat"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="sendProductToAdmin()">📤 Adminga yuborish</button>
+      <button class="btn btn-ghost" id="detail-like-btn" onclick="likeProductDetail()">❤️ Like</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= ADMIN LOGIN MODAL ============================= -->
+<div class="modal-overlay" id="admin-login-modal">
+  <div class="modal-box" style="max-width:380px">
+    <div class="modal-header">
+      <h3 class="modal-title">🔐 Admin Panel</h3>
+      <button class="modal-close" onclick="closeModal('admin-login-modal')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Login</label><input class="form-input" id="admin-login-input" placeholder="admin" onkeydown="if(event.key==='Enter')tryAdminLogin()"/></div>
+    <div class="form-group"><label class="form-label">Parol</label><input class="form-input" id="admin-pass-input" type="password" placeholder="••••••" onkeydown="if(event.key==='Enter')tryAdminLogin()"/></div>
+    <button class="btn btn-primary btn-full" onclick="tryAdminLogin()">Kirish</button>
+  </div>
+</div>
+
+<!-- ============================= ADMIN PANEL MODAL ============================= -->
+<div class="modal-overlay" id="admin-panel-modal">
+  <div class="modal-box" style="max-width:960px">
+    <div class="modal-header">
+      <h3 class="modal-title">👨‍💼 Admin Panel</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-ghost btn-sm" onclick="openManagerLogin()">⚙️ sayt boshqaruvi</button>
+        <button class="modal-close" onclick="closeModal('admin-panel-modal')">✕</button>
+      </div>
+    </div>
+
+    <!-- Admin stats quick -->
+    <div class="admin-grid" style="margin-bottom:16px">
+      <div class="stat-card"><div class="stat-num" style="color:var(--accent)" id="a-stat-prods">0</div><div class="stat-label">Mahsulotlar</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--green)" id="a-stat-users">0</div><div class="stat-label">Mijozlar</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--blue)" id="a-stat-msgs">0</div><div class="stat-label">Xabarlar</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--red)" id="a-stat-likes">0</div><div class="stat-label">Liklar</div></div>
+    </div>
+
+    <div class="tabs" id="admin-tabs">
+      <button class="tab active" onclick="switchTab('admin','products')">📦 Mahsulotlar</button>
+      <button class="tab" onclick="switchTab('admin','add')">➕ Qo'shish</button>
+      <button class="tab" onclick="switchTab('admin','chat')">💬 Chat</button>
+      <button class="tab" onclick="switchTab('admin','filters')">🏷 Filterlar</button>
+      <button class="tab" onclick="switchTab('admin','design')">🎨 Dizayn</button>
+    </div>
+
+    <!-- Products -->
+    <div class="tab-panel active" id="admin-tab-products">
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input class="form-input" style="flex:1" id="admin-prod-search" placeholder="Qidirish..." oninput="renderAdminProducts()"/>
+      </div>
+      <div id="admin-products-list" style="max-height:380px;overflow-y:auto"></div>
+    </div>
+
+    <!-- Add product -->
+    <div class="tab-panel" id="admin-tab-add">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div class="form-group"><label class="form-label">Mahsulot nomi *</label><input class="form-input" id="ap-name" placeholder="Nomi..."/></div>
+          <div class="form-group"><label class="form-label">Narxi (UZS) *</label><input class="form-input" id="ap-price" type="number" placeholder="Narx..."/></div>
+          <div class="form-group"><label class="form-label">Oldingi narxi (ixtiyoriy)</label><input class="form-input" id="ap-old-price" type="number" placeholder="Eski narx..."/></div>
+          <div class="form-group"><label class="form-label">Ma'lumot</label><textarea class="form-input" id="ap-desc" style="min-height:70px" placeholder="Mahsulot haqida..."></textarea></div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label class="form-label">Kategoriya (filter)</label>
+            <div class="cat-btns" id="add-cat-btns"></div>
+          </div>
+          <div class="form-group" style="margin-top:10px">
+            <label class="form-label">Emoji (ixtiyoriy)</label>
+            <input class="form-input" id="ap-emoji" placeholder="📦" maxlength="2"/>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.82rem">
+              <input type="checkbox" id="ap-stock" checked/> Mavjud (bor)
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rasmlar (ko'p tanlash mumkin)</label>
+        <div class="img-upload-area" onclick="document.getElementById('ap-imgs').click()">
+          <div style="font-size:2rem;margin-bottom:6px">📸</div>
+          <div style="font-size:0.82rem;color:var(--text-muted)">Rasm yuklash uchun bosing</div>
+          <input type="file" id="ap-imgs" multiple accept="image/*" style="display:none" onchange="previewImgs(this)"/>
+        </div>
+        <div class="img-preview-grid" id="ap-img-preview"></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="addProduct()">➕ Qo'shish</button>
+    </div>
+
+    <!-- Chat (3 sub-panels) -->
+    <div class="tab-panel" id="admin-tab-chat">
+      <div class="admin-chat-layout">
+        <div class="admin-chat-sidebar">
+          <div class="admin-chat-sidebar-tabs">
+            <button class="acs-tab active" onclick="switchACS('clients')" id="acst-clients">Mijozlar</button>
+            <button class="acs-tab" onclick="switchACS('group')" id="acst-group">Guruh</button>
+            <button class="acs-tab" onclick="switchACS('channel')" id="acst-channel">Kanal</button>
+          </div>
+          <div id="acs-clients-list"></div>
+          <div id="acs-group-info" style="display:none;padding:12px;font-size:0.78rem;color:var(--text-muted)">Guruh xabarlari o'ngda ko'rinadi</div>
+          <div id="acs-channel-info" style="display:none;padding:12px;font-size:0.78rem;color:var(--text-muted)">Kanal postlari o'ngda</div>
+        </div>
+        <div class="admin-chat-main">
+          <div class="admin-chat-header" id="admin-chat-header">Chat tanlang</div>
+          <div class="messages-area" id="admin-msgs-area"></div>
+
+          <!-- Input: client / group reply -->
+          <div id="admin-msg-bar" class="chat-input-bar" style="display:none">
+            <input class="form-input" id="admin-msg-input" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')sendAdminReply()"/>
+            <button class="btn btn-primary btn-sm" onclick="sendAdminReply()">📤</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteAdminChat()" data-tip="Chatni o'chirish">🗑</button>
+          </div>
+
+          <!-- Input: channel post -->
+          <div id="admin-channel-bar" style="display:none;padding:12px;border-top:1px solid var(--border)">
+            <div style="display:flex;gap:8px;margin-bottom:8px">
+              <input type="file" id="admin-channel-img" accept="image/*,video/*" style="display:none" onchange="previewChannelMedia()"/>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('admin-channel-img').click()">📎</button>
+              <input class="form-input" id="admin-channel-text" placeholder="Post matni..." style="flex:1"/>
+              <button class="btn btn-primary btn-sm" onclick="postToChannel()">📤</button>
+            </div>
+            <div id="channel-media-preview" style="font-size:0.75rem;color:var(--text-muted)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="tab-panel" id="admin-tab-filters">
+      <div id="admin-filters-list" style="margin-bottom:14px"></div>
+      <div style="display:flex;gap:8px">
+        <input class="form-input" id="new-filter-input" placeholder="Yangi filter nomi..." style="flex:1"/>
+        <button class="btn btn-primary" onclick="addFilter()">➕ Qo'shish</button>
+      </div>
+    </div>
+
+    <!-- Design -->
+    <div class="tab-panel" id="admin-tab-design">
+      <h4 style="margin-bottom:12px;font-size:0.88rem;color:var(--text-secondary)">Tema tanlang</h4>
+      <div class="design-themes" style="margin-bottom:20px">
+        <div class="theme-card active" style="background:#1a1a23;color:#c9a96e" onclick="applyTheme('dark')" id="theme-dark">🌙 Qora</div>
+        <div class="theme-card" style="background:#f0efe9;color:#111" onclick="applyTheme('light')" id="theme-light">☀️ Yorug'</div>
+        <div class="theme-card" style="background:#05080f;color:#60b4ff" onclick="applyTheme('blue')" id="theme-blue">💙 Ko'k</div>
+        <div class="theme-card" style="background:#050f0a;color:#3ecf8e" onclick="applyTheme('green')" id="theme-green">💚 Yashil</div>
+      </div>
+      <h4 style="margin-bottom:12px;font-size:0.88rem;color:var(--text-secondary)">Layout</h4>
+      <div style="display:flex;gap:8px;margin-bottom:20px">
+        <button class="btn btn-ghost" onclick="applyLayout('compact')">📐 Compact</button>
+        <button class="btn btn-ghost" onclick="applyLayout('normal')">📋 Normal</button>
+        <button class="btn btn-ghost" onclick="applyLayout('spacious')">🖼 Spacious</button>
+      </div>
+      <h4 style="margin-bottom:12px;font-size:0.88rem;color:var(--text-secondary)">Shrift o'lchami</h4>
+      <div style="display:flex;gap:8px;margin-bottom:20px">
+        <button class="btn btn-ghost btn-sm" onclick="applyFontSize('small')">S</button>
+        <button class="btn btn-ghost btn-sm" onclick="applyFontSize('normal')">M</button>
+        <button class="btn btn-ghost btn-sm" onclick="applyFontSize('large')">L</button>
+      </div>
+      <div class="divider"></div>
+      <div class="form-group"><label class="form-label">Sayt nomi (logotip matni)</label>
+        <div style="display:flex;gap:8px">
+          <input class="form-input" id="design-sitename" style="flex:1"/>
+          <button class="btn btn-primary" onclick="saveDesignName()">Saqlash</button>
+        </div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px">⚠ Dukkon nomini o'zgartirish faqat boshqaruvchida</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= MANAGER LOGIN MODAL ============================= -->
+<div class="modal-overlay" id="manager-login-modal">
+  <div class="modal-box" style="max-width:380px">
+    <div class="modal-header">
+      <h3 class="modal-title" style="color:var(--green)">⚙️ Boshqaruvchi</h3>
+      <button class="modal-close" onclick="closeModal('manager-login-modal')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Login</label><input class="form-input" id="mgr-login-input" placeholder="mhdv" onkeydown="if(event.key==='Enter')tryManagerLogin()"/></div>
+    <div class="form-group"><label class="form-label">Parol</label><input class="form-input" id="mgr-pass-input" type="password" placeholder="••••••" onkeydown="if(event.key==='Enter')tryManagerLogin()"/></div>
+    <button class="btn btn-green btn-full" onclick="tryManagerLogin()">Kirish</button>
+  </div>
+</div>
+
+<!-- ============================= MANAGER PANEL MODAL ============================= -->
+<div class="modal-overlay" id="manager-panel-modal">
+  <div class="modal-box" style="max-width:1000px">
+    <div class="modal-header">
+      <h3 class="modal-title" style="color:var(--green)">⚙️ Boshqaruvchi Panel</h3>
+      <button class="modal-close" onclick="closeModal('manager-panel-modal')">✕</button>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="admin-grid" style="margin-bottom:16px">
+      <div class="stat-card"><div class="stat-num" style="color:var(--accent)" id="m-stat-prods">0</div><div class="stat-label">Mahsulotlar</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--green)" id="m-stat-users">0</div><div class="stat-label">Foydalanuvchilar</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--blue)" id="m-stat-groups">0</div><div class="stat-label">Guruhlar</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--red)" id="m-stat-ads">0</div><div class="stat-label">Reklamalar</div></div>
+    </div>
+
+    <div class="tabs" id="mgr-tabs">
+      <button class="tab active" onclick="switchMgrTab('products')">📦 Mahsulotlar</button>
+      <button class="tab" onclick="switchMgrTab('add')">➕ Qo'shish</button>
+      <button class="tab" onclick="switchMgrTab('chat')">💬 Chat</button>
+      <button class="tab" onclick="switchMgrTab('groups')">👥 Guruhlar</button>
+      <button class="tab" onclick="switchMgrTab('site')">🌐 Sayt</button>
+      <button class="tab" onclick="switchMgrTab('ads')">📣 Reklama</button>
+      <button class="tab" onclick="switchMgrTab('users')">👤 Foydalanuvchilar</button>
+      <button class="tab" onclick="switchMgrTab('admins')">👨‍💼 Adminlar</button>
+      <button class="tab" onclick="switchMgrTab('creds')">🔐 Login/Parol</button>
+      <button class="tab" onclick="switchMgrTab('design')">🎨 Dizayn</button>
+      <button class="tab" onclick="switchMgrTab('cloud')">☁ Cloud</button>
+      <button class="tab" onclick="switchMgrTab('analytics')">📊 Analitika</button>
+      <button class="tab" onclick="switchMgrTab('backup')">💾 Backup</button>
+      <button class="tab" onclick="switchMgrTab('seo')">🔍 SEO</button>
+      <button class="tab" onclick="switchMgrTab('notify')">🔔 Xabarnoma</button>
+      <button class="tab" onclick="switchMgrTab('sections')">🧩 Bo'limlar</button>
+      <button class="tab" onclick="switchMgrTab('settings')">⚙ Sozlamalar</button>
+    </div>
+
+    <!-- MGR: Products (same as admin) -->
+    <div class="mgr-tab-panel active" id="mgr-tab-products">
+      <div style="display:flex;gap:8px;margin-bottom:12px"><input class="form-input" style="flex:1" id="mgr-prod-search" placeholder="Qidirish..." oninput="renderMgrProducts()"/></div>
+      <div id="mgr-products-list" style="max-height:380px;overflow-y:auto"></div>
+    </div>
+
+    <!-- MGR: Add (same as admin add) -->
+    <div class="mgr-tab-panel" id="mgr-tab-add">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="mgr-grid">
+        <div>
+          <div class="form-group"><label class="form-label">Mahsulot nomi *</label><input class="form-input" id="mp-name" placeholder="Nomi..."/></div>
+          <div class="form-group"><label class="form-label">Narxi *</label><input class="form-input" id="mp-price" type="number" placeholder="Narx..."/></div>
+          <div class="form-group"><label class="form-label">Oldingi narxi</label><input class="form-input" id="mp-old-price" type="number" placeholder="Eski narx..."/></div>
+          <div class="form-group"><label class="form-label">Ma'lumot</label><textarea class="form-input" id="mp-desc" style="min-height:70px" placeholder="Mahsulot haqida..."></textarea></div>
+        </div>
+        <div>
+          <div class="form-group"><label class="form-label">Kategoriya</label><div class="cat-btns" id="mgr-cat-btns"></div></div>
+          <div class="form-group" style="margin-top:10px"><label class="form-label">Emoji</label><input class="form-input" id="mp-emoji" placeholder="📦" maxlength="2"/></div>
+          <div class="form-group"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.82rem"><input type="checkbox" id="mp-stock" checked/> Mavjud</label></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rasmlar</label>
+        <div class="img-upload-area" onclick="document.getElementById('mp-imgs').click()">
+          <div style="font-size:2rem;margin-bottom:6px">📸</div>
+          <div style="font-size:0.82rem;color:var(--text-muted)">Rasm yuklash</div>
+          <input type="file" id="mp-imgs" multiple accept="image/*" style="display:none" onchange="previewImgsMgr(this)"/>
+        </div>
+        <div class="img-preview-grid" id="mp-img-preview"></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="addProductMgr()">➕ Qo'shish</button>
+    </div>
+
+    <!-- MGR: Chat (full, same as admin chat) -->
+    <div class="mgr-tab-panel" id="mgr-tab-chat">
+      <div class="admin-chat-layout">
+        <div class="admin-chat-sidebar">
+          <div class="admin-chat-sidebar-tabs">
+            <button class="acs-tab active" onclick="switchMCS('clients')" id="mcst-clients">Mijozlar</button>
+            <button class="acs-tab" onclick="switchMCS('group')" id="mcst-group">Guruh</button>
+            <button class="acs-tab" onclick="switchMCS('channel')" id="mcst-channel">Kanal</button>
+          </div>
+          <div id="mcs-clients-list"></div>
+          <div id="mcs-group-info" style="display:none;padding:12px;font-size:0.78rem;color:var(--text-muted)">Guruh xabarlari</div>
+          <div id="mcs-channel-info" style="display:none;padding:12px;font-size:0.78rem;color:var(--text-muted)">Kanal</div>
+        </div>
+        <div class="admin-chat-main">
+          <div class="admin-chat-header" id="mgr-chat-header">Chat tanlang</div>
+          <div class="messages-area" id="mgr-msgs-area"></div>
+          <div id="mgr-msg-bar" class="chat-input-bar" style="display:none">
+            <input class="form-input" id="mgr-msg-input" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')sendMgrReply()"/>
+            <button class="btn btn-primary btn-sm" onclick="sendMgrReply()">📤</button>
+          </div>
+          <div id="mgr-channel-bar" style="display:none;padding:12px;border-top:1px solid var(--border)">
+            <div style="display:flex;gap:8px">
+              <input type="file" id="mgr-channel-img" accept="image/*,video/*" style="display:none" onchange="previewMgrChannelMedia()"/>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('mgr-channel-img').click()">📎</button>
+              <input class="form-input" id="mgr-channel-text" placeholder="Post matni..." style="flex:1"/>
+              <button class="btn btn-primary btn-sm" onclick="postToChannelMgr()">📤</button>
+            </div>
+            <div id="mgr-media-preview" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MGR: Groups -->
+    <div class="mgr-tab-panel" id="mgr-tab-groups">
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <input class="form-input" id="new-group-name" placeholder="Guruh nomi..." style="flex:1"/>
+        <button class="btn btn-primary" onclick="addGroup()">➕ Guruh yaratish</button>
+      </div>
+      <div id="mgr-groups-list"></div>
+    </div>
+
+    <!-- MGR: Site info -->
+    <div class="mgr-tab-panel" id="mgr-tab-site">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="mgr-grid">
+        <div>
+          <div class="form-group"><label class="form-label">Do'kon nomi</label><input class="form-input" id="mgr-storename" placeholder="SAMO"/></div>
+          <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="mgr-phone" placeholder="+998..."/></div>
+          <div class="form-group"><label class="form-label">Telegram</label><input class="form-input" id="mgr-telegram" placeholder="https://t.me/..."/></div>
+          <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="mgr-instagram" placeholder="https://instagram.com/..."/></div>
+        </div>
+        <div>
+          <div class="form-group"><label class="form-label">Google Maps</label><input class="form-input" id="mgr-map" placeholder="https://maps.google.com/..."/></div>
+          <div class="form-group"><label class="form-label">Haqida</label><textarea class="form-input" id="mgr-about" style="min-height:60px"></textarea></div>
+          <div class="form-group"><label class="form-label">Reklama matni (promo)</label><input class="form-input" id="mgr-promo" placeholder="Eng zo'r narxlar!"/></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveSiteInfo()">💾 Saqlash</button>
+    </div>
+
+    <!-- MGR: Ads -->
+    <div class="mgr-tab-panel" id="mgr-tab-ads">
+      <div style="margin-bottom:16px">
+        <div class="form-group"><label class="form-label">Reklama matni</label><input class="form-input" id="ad-text" placeholder="Reklama matni..."/></div>
+        <div class="form-group"><label class="form-label">Havola (ixtiyoriy)</label><input class="form-input" id="ad-link" placeholder="https://..."/></div>
+        <div class="form-group"><label class="form-label">Rasm (ixtiyoriy)</label><input type="file" id="ad-img" accept="image/*" onchange="previewAdImg(this)"/><div id="ad-img-preview" style="margin-top:8px"></div></div>
+        <div class="form-group">
+          <label class="form-label">Ko'rish joyi</label>
+          <div style="display:flex;gap:8px">
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.82rem;cursor:pointer"><input type="checkbox" id="ad-promo-bar" checked/> Promo bar</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.82rem;cursor:pointer"><input type="checkbox" id="ad-popup"/> Popup</label>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addAd()">📣 Reklama qo'shish</button>
+      </div>
+      <div id="ads-list"></div>
+    </div>
+
+    <!-- MGR: Users -->
+    <div class="mgr-tab-panel" id="mgr-tab-users">
+      <div id="mgr-users-list"></div>
+    </div>
+
+    <!-- MGR: Admins management -->
+    <div class="mgr-tab-panel" id="mgr-tab-admins">
+      <h4 style="margin-bottom:12px;color:var(--accent)">Admin boshqaruvi</h4>
+      <div id="admin-list-mgr" style="margin-bottom:14px"></div>
+      <div class="form-group"><label class="form-label">Yangi admin qo'shish</label></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <input class="form-input" id="new-admin-user" placeholder="Login..."/>
+        <input class="form-input" id="new-admin-pass" type="password" placeholder="Parol..."/>
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px" onclick="addAdmin()">➕ Admin qo'shish</button>
+    </div>
+
+    <!-- MGR: Credentials -->
+    <div class="mgr-tab-panel" id="mgr-tab-creds">
+      <h4 style="margin-bottom:14px;color:var(--green)">Login / Parollarni o'zgartirish</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="mgr-grid">
+        <div style="background:rgba(201,169,110,0.06);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
+          <h5 style="margin-bottom:12px;font-size:0.88rem">👨‍💼 Admin</h5>
+          <div class="form-group"><label class="form-label">Login</label><input class="form-input" id="cred-admin-user" placeholder="admin"/></div>
+          <div class="form-group"><label class="form-label">Parol</label><input class="form-input" id="cred-admin-pass" type="password" placeholder="••••••"/></div>
+          <button class="btn btn-primary" onclick="saveCreds('admin')">💾 Saqlash</button>
+        </div>
+        <div style="background:rgba(62,207,142,0.06);border:1px solid rgba(62,207,142,0.2);border-radius:var(--radius);padding:16px">
+          <h5 style="margin-bottom:12px;font-size:0.88rem">⚙️ Boshqaruvchi</h5>
+          <div class="form-group"><label class="form-label">Login</label><input class="form-input" id="cred-mgr-user" placeholder="mhdv"/></div>
+          <div class="form-group"><label class="form-label">Parol</label><input class="form-input" id="cred-mgr-pass" type="password" placeholder="••••••"/></div>
+          <button class="btn btn-green" onclick="saveCreds('mgr')">💾 Saqlash</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MGR: Design (full) -->
+    <div class="mgr-tab-panel" id="mgr-tab-design">
+      <h4 style="margin-bottom:12px;font-size:0.88rem;color:var(--text-secondary)">Tema</h4>
+      <div class="design-themes" style="margin-bottom:20px">
+        <div class="theme-card" style="background:#1a1a23;color:#c9a96e" onclick="applyTheme('dark')">🌙 Qora</div>
+        <div class="theme-card" style="background:#f0efe9;color:#111" onclick="applyTheme('light')">☀️ Yorug'</div>
+        <div class="theme-card" style="background:#05080f;color:#60b4ff" onclick="applyTheme('blue')">💙 Ko'k</div>
+        <div class="theme-card" style="background:#050f0a;color:#3ecf8e" onclick="applyTheme('green')">💚 Yashil</div>
+      </div>
+      <div class="divider"></div>
+      <h4 style="margin-bottom:12px;font-size:0.88rem;color:var(--text-secondary)">Bo'limlar rangi</h4>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px">
+        <label style="font-size:0.78rem;color:var(--text-secondary)">Asosiy rang:</label>
+        <input type="color" id="custom-accent" value="#c9a96e" onchange="applyCustomAccent(this.value)" style="width:40px;height:32px;border:none;background:none;cursor:pointer"/>
+      </div>
+      <div class="divider"></div>
+      <h4 style="margin-bottom:12px;font-size:0.88rem;color:var(--text-secondary)">Layout va shrift</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-ghost" onclick="applyLayout('compact')">📐 Compact</button>
+        <button class="btn btn-ghost" onclick="applyLayout('normal')">📋 Normal</button>
+        <button class="btn btn-ghost" onclick="applyLayout('spacious')">🖼 Spacious</button>
+        <button class="btn btn-ghost" onclick="applyFontSize('small')">S</button>
+        <button class="btn btn-ghost" onclick="applyFontSize('normal')">M</button>
+        <button class="btn btn-ghost" onclick="applyFontSize('large')">L</button>
+      </div>
+    </div>
+
+    <!-- MGR: Cloud -->
+    <div class="mgr-tab-panel" id="mgr-tab-cloud">
+      <h4 style="margin-bottom:14px;color:var(--blue)">☁ Cloud Storage</h4>
+      <div style="display:grid;gap:10px;margin-bottom:16px">
+        <div class="cloud-item"><div class="cloud-icon">📦</div><div><div class="cloud-name">Mahsulotlar ma'lumoti</div><div class="cloud-size" id="cloud-prods-size">0 KB</div></div><div style="margin-left:auto"><button class="btn btn-primary btn-sm" onclick="cloudSync()">↑ Sync</button></div></div>
+        <div class="cloud-item"><div class="cloud-icon">💬</div><div><div class="cloud-name">Chat ma'lumotlari</div><div class="cloud-size" id="cloud-chats-size">0 KB</div></div><div style="margin-left:auto"><button class="btn btn-ghost btn-sm" onclick="cloudSyncChats()">↑ Sync</button></div></div>
+        <div class="cloud-item"><div class="cloud-icon">📢</div><div><div class="cloud-name">Kanal postlari</div><div class="cloud-size" id="cloud-channel-size">0 KB</div></div><div style="margin-left:auto"><button class="btn btn-ghost btn-sm" onclick="cloudSyncChannel()">↑ Sync</button></div></div>
+        <div class="cloud-item"><div class="cloud-icon">⚙️</div><div><div class="cloud-name">Sozlamalar</div><div class="cloud-size" id="cloud-config-size">0 KB</div></div><div style="margin-left:auto"><button class="btn btn-ghost btn-sm" onclick="cloudSyncConfig()">↑ Sync</button></div></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="cloudSyncAll()">☁ Barchasini Cloud'ga saqlash</button>
+      <div style="margin-top:12px;font-size:0.75rem;color:var(--text-muted)" id="cloud-status">Oxirgi sync: —</div>
+    </div>
+
+    <!-- MGR: Analytics -->
+    <div class="mgr-tab-panel" id="mgr-tab-analytics">
+      <h4 style="margin-bottom:14px;color:var(--accent)">📊 To'liq Analitika</h4>
+      <div class="admin-grid" style="margin-bottom:20px">
+        <div class="stat-card"><div class="stat-num" style="color:var(--accent)" id="an-prods">0</div><div class="stat-label">Mahsulotlar</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--green)" id="an-users">0</div><div class="stat-label">Foydalanuvchilar</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--blue)" id="an-msgs">0</div><div class="stat-label">Jami xabarlar</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--red)" id="an-likes">0</div><div class="stat-label">Jami liklar</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--accent)" id="an-channel">0</div><div class="stat-label">Kanal postlari</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--green)" id="an-groups">0</div><div class="stat-label">Guruhlar</div></div>
+      </div>
+      <h5 style="margin-bottom:8px;font-size:0.85rem">Top liked mahsulotlar:</h5>
+      <div id="top-liked-list"></div>
+    </div>
+
+    <!-- MGR: Backup -->
+    <div class="mgr-tab-panel" id="mgr-tab-backup">
+      <h4 style="margin-bottom:14px;color:var(--accent)">💾 Ma'lumotlarni saqlash / yuklash</h4>
+      <div style="display:grid;gap:10px">
+        <div style="background:rgba(255,255,255,0.04);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border)">
+          <h5 style="margin-bottom:8px">Export (yuklab olish)</h5>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="exportData('all')">📦 Barcha data</button>
+            <button class="btn btn-ghost" onclick="exportData('products')">Mahsulotlar</button>
+            <button class="btn btn-ghost" onclick="exportData('chats')">Chatlar</button>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border)">
+          <h5 style="margin-bottom:8px">Import (yuklash)</h5>
+          <input type="file" id="import-file" accept=".json" onchange="importData(this)"/>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:6px">Faqat oldingi export qilingan JSON fayllar</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MGR: SEO -->
+    <div class="mgr-tab-panel" id="mgr-tab-seo">
+      <h4 style="margin-bottom:14px;color:var(--accent)">🔍 SEO Sozlamalari</h4>
+      <div class="form-group"><label class="form-label">Sahifa sarlavhasi (title)</label><input class="form-input" id="seo-title" placeholder="SAMO - Erkaklar Do'koni"/></div>
+      <div class="form-group"><label class="form-label">Meta description</label><textarea class="form-input" id="seo-desc" style="min-height:60px" placeholder="SAMO - eng zo'r erkaklar kiyim do'koni..."></textarea></div>
+      <div class="form-group"><label class="form-label">Keywords</label><input class="form-input" id="seo-keywords" placeholder="samo, erkaklar kiyim, ko'ylak..."/></div>
+      <button class="btn btn-primary" onclick="saveSEO()">💾 Saqlash</button>
+    </div>
+
+    <!-- MGR: Notifications -->
+    <div class="mgr-tab-panel" id="mgr-tab-notify">
+      <h4 style="margin-bottom:14px;color:var(--accent)">🔔 Xabarnoma yuborish</h4>
+      <div class="form-group"><label class="form-label">Sarlavha</label><input class="form-input" id="notif-title" placeholder="Yangilik!"/></div>
+      <div class="form-group"><label class="form-label">Matn</label><textarea class="form-input" id="notif-text" style="min-height:60px" placeholder="Xabarnoma matni..."></textarea></div>
+      <div class="form-group">
+        <label class="form-label">Yuborish joyi</label>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;cursor:pointer"><input type="checkbox" id="notif-channel" checked/> Kanal</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;cursor:pointer"><input type="checkbox" id="notif-group"/> Guruh</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;cursor:pointer"><input type="checkbox" id="notif-popup"/> Popup</label>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="sendNotification()">🔔 Yuborish</button>
+      <div class="divider"></div>
+      <h5 style="margin-bottom:10px;font-size:0.85rem">Oldingi xabarnomalar:</h5>
+      <div id="notifications-list"></div>
+    </div>
+
+    <!-- MGR: Sections (qismlar) -->
+    <div class="mgr-tab-panel" id="mgr-tab-sections">
+      <h4 style="margin-bottom:14px;color:var(--accent)">🧩 Sayt bo'limlari</h4>
+      <div id="sections-list"></div>
+      <div class="divider"></div>
+      <h5 style="margin-bottom:10px;font-size:0.85rem">Yangi bo'lim qo'shish:</h5>
+      <div class="form-group"><label class="form-label">Bo'lim nomi</label><input class="form-input" id="new-section-name" placeholder="Bo'lim nomi..."/></div>
+      <div class="form-group"><label class="form-label">Bo'lim turi</label>
+        <select class="form-select" id="new-section-type">
+          <option value="banner">Banner</option>
+          <option value="text">Matn bloki</option>
+          <option value="products">Mahsulotlar grid</option>
+          <option value="contacts">Kontaktlar</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="addSection()">➕ Qo'shish</button>
+    </div>
+
+    <!-- MGR: Settings -->
+    <div class="mgr-tab-panel" id="mgr-tab-settings">
+      <h4 style="margin-bottom:14px;color:var(--accent)">⚙ Umumiy Sozlamalar</h4>
+      <div style="display:grid;gap:10px">
+        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);cursor:pointer">
+          <input type="checkbox" id="set-maintenance" onchange="toggleMaintenance()"/> <span><strong style="font-size:0.85rem">Texnik tanaffus</strong><br><span style="font-size:0.75rem;color:var(--text-muted)">Sayt foydalanuvchilarga yopiladi</span></span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);cursor:pointer">
+          <input type="checkbox" id="set-promo" onchange="togglePromoBar()"/> <span><strong style="font-size:0.85rem">Promo bar ko'rsatish</strong><br><span style="font-size:0.75rem;color:var(--text-muted)">Yuqorida sariq chiziq</span></span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);cursor:pointer">
+          <input type="checkbox" id="set-likes" checked onchange="toggleLikes()"/> <span><strong style="font-size:0.85rem">Like tugmasini ko'rsatish</strong></span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);cursor:pointer">
+          <input type="checkbox" id="set-chat" checked onchange="toggleChatNav()"/> <span><strong style="font-size:0.85rem">Chat bo'limini ko'rsatish</strong></span>
+        </label>
+      </div>
+      <div class="divider"></div>
+      <button class="btn btn-danger" onclick="clearAllData()">🗑 Barcha ma'lumotlarni tozalash</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<!-- ============================= SCRIPT ============================= -->
+<script>
+// ============================================================
+// CONSTANTS & STATE
+// ============================================================
+const LS_KEY = 'samo_v4';
+const CHAT_KEY = 'samo_chats_v4';
+const CHANNEL_KEY = 'samo_channel_v4';
+const GROUP_KEY = 'samo_group_v4';
+
+const JSONBIN = {
+  binId: '6a217c87da38895dfe86a554',
+  token: '$2a$10$Uy/g0P0NnKhmt1.nem9huONtpxrdoaRD9JUmI.2TrpwLJGy5mAGNm'
+};
+
+let STATE = {
+  config: {
+    storeName: 'SAMO',
+    phone: '+998 90 123 45 67',
+    telegram: 'https://t.me/samo',
+    instagram: 'https://instagram.com/samo',
+    map: '',
+    about: 'SAMO erkaklar kiyim do\'koni',
+    promo: 'Eng zo\'r narxlar!',
+    adminUser: 'admin',
+    adminPass: '1234',
+    managerUser: 'mhdv',
+    managerPass: 'mhdvmim',
+    filters: ['👔 Tepa kiyimlar','👖 Pastki kiyimlar','👟 Oyoq kiyimlar','🧢 Bosh kiyim'],
+    theme: 'dark',
+    layout: 'normal',
+    fontSize: 'normal',
+    showPromo: false,
+    showLikes: true,
+    showChat: true,
+    maintenance: false,
+    seoTitle: 'SAMO - Erkaklar Kiyim Do\'koni',
+    seoDesc: '',
+    seoKeywords: '',
+    accentColor: '#c9a96e',
+    sections: [],
+    ads: []
+  },
+  products: [
+    { id:1, name:'Qo\'qon ko\'ylagi', price:150000, oldPrice:null, emoji:'👕', desc:'Yuqori sifatli ko\'ylak', category:'👔 Tepa kiyimlar', stock:true, likes:3, images:[] },
+    { id:2, name:'Jins shim', price:200000, oldPrice:240000, emoji:'👖', desc:'Original jins shim', category:'👖 Pastki kiyimlar', stock:true, likes:7, images:[] },
+    { id:3, name:'Sport krossovka', price:180000, oldPrice:null, emoji:'👟', desc:'Qulay sport oyoq kiyim', category:'👟 Oyoq kiyimlar', stock:false, likes:1, images:[] },
+  ],
+  nextId: 4,
+  groups: ['Umumiy Guruh'],
+  admins: [{ user:'admin', pass:'1234' }],
+  notifications: []
+};
+
+let chats = {};
+let channelPosts = [];
+let groupMessages = [];
+let currentFilter = 'all';
+let currentChatUser = null;
+let currentUserChatId = null;
+let currentAdminChat = null;
+let currentAdminSection = 'clients';
+let currentMgrChat = null;
+let currentMgrSection = 'clients';
+let selectedProductId = null;
+let addProductImages = [];
+let mgrProductImages = [];
+let channelMediaData = null;
+let mgrChannelMediaData = null;
+let likedProducts = new Set(JSON.parse(localStorage.getItem('samo_liked') || '[]'));
+let adData = { img:null };
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  loadChats();
+  loadChannel();
+  loadGroup();
+  applyTheme(STATE.config.theme, false);
+  applyLayout(STATE.config.layout, false);
+  applyFontSize(STATE.config.fontSize, false);
+  renderProducts();
+  renderFilters();
+  updatePromoBar();
+  renderGroupNav();
+  renderChannelNav();
+  document.getElementById('logo').textContent = STATE.config.storeName;
+  syncFromCloud();
+  setInterval(pollMessages, 4000);
+});
+
+function loadState() {
+  try { const s = localStorage.getItem(LS_KEY); if(s) STATE = deepMerge(STATE, JSON.parse(s)); } catch(e) {}
+}
+function saveState() { localStorage.setItem(LS_KEY, JSON.stringify(STATE)); syncToCloud(); }
+function loadChats() { try { chats = JSON.parse(localStorage.getItem(CHAT_KEY)||'{}'); } catch(e) {} }
+function loadChannel() { try { channelPosts = JSON.parse(localStorage.getItem(CHANNEL_KEY)||'[]'); } catch(e) {} }
+function loadGroup() { try { groupMessages = JSON.parse(localStorage.getItem(GROUP_KEY)||'[]'); } catch(e) {} }
+function saveChats() { localStorage.setItem(CHAT_KEY, JSON.stringify(chats)); }
+function saveChannel() { localStorage.setItem(CHANNEL_KEY, JSON.stringify(channelPosts)); }
+function saveGroup() { localStorage.setItem(GROUP_KEY, JSON.stringify(groupMessages)); }
+
+function deepMerge(target, source) {
+  const out = { ...target };
+  for (const k in source) {
+    if (source[k] && typeof source[k] === 'object' && !Array.isArray(source[k])) {
+      out[k] = deepMerge(target[k] || {}, source[k]);
+    } else { out[k] = source[k]; }
+  }
+  return out;
+}
+
+// Polling for real-time feel
+function pollMessages() {
+  loadChats(); loadChannel(); loadGroup();
+  const upa = document.getElementById('upanel-direct');
+  if (upa && upa.classList.contains('active') && currentUserChatId) renderDirectMsgs();
+  const upg = document.getElementById('upanel-group');
+  if (upg && upg.classList.contains('active')) renderGroupMsgs('group-msgs');
+  const upc = document.getElementById('upanel-channel');
+  if (upc && upc.classList.contains('active')) renderChannelMsgsUser('channel-msgs-user');
+  renderGroupNav(); renderChannelNav();
+}
+
+// ============================================================
+// CLOUD SYNC
+// ============================================================
+async function syncFromCloud() {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN.binId}/latest`, { headers:{'X-Master-Key':JSONBIN.token} });
+    if (res.ok) {
+      const d = await res.json();
+      if (d.record) { STATE = deepMerge(STATE, d.record); localStorage.setItem(LS_KEY, JSON.stringify(STATE)); applyAll(); renderProducts(); renderFilters(); }
+    }
+  } catch(e) {}
+}
+async function syncToCloud() {
+  try {
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN.binId}`, {
+      method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN.token}, body:JSON.stringify(STATE)
+    });
+  } catch(e) {}
+}
+function cloudSync() { syncToCloud(); showToast('☁ Cloud\'ga yuborildi','success'); updateCloudSizes(); }
+function cloudSyncChats() { showToast('✅ Chat data yuborildi','success'); }
+function cloudSyncChannel() { showToast('✅ Kanal data yuborildi','success'); }
+function cloudSyncConfig() { syncToCloud(); showToast('✅ Config yuborildi','success'); }
+function cloudSyncAll() { syncToCloud(); showToast('☁ Hammasi yuborildi','success'); updateCloudSizes(); document.getElementById('cloud-status').textContent = 'Oxirgi sync: ' + new Date().toLocaleString('uz-UZ'); }
+function updateCloudSizes() {
+  const p = JSON.stringify(STATE.products); const c = JSON.stringify(chats); const ch = JSON.stringify(channelPosts); const cf = JSON.stringify(STATE.config);
+  document.getElementById('cloud-prods-size').textContent = (p.length/1024).toFixed(1)+' KB';
+  document.getElementById('cloud-chats-size').textContent = (c.length/1024).toFixed(1)+' KB';
+  document.getElementById('cloud-channel-size').textContent = (ch.length/1024).toFixed(1)+' KB';
+  document.getElementById('cloud-config-size').textContent = (cf.length/1024).toFixed(1)+' KB';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function navTo(section) {
+  ['products','chat','group','channel'].forEach(s => {
+    const el = document.getElementById('section-'+s); if(el) el.style.display = 'none';
+    const btn = document.getElementById('nav-'+s); if(btn) btn.classList.remove('active');
+  });
+  const el = document.getElementById('section-'+section); if(el) el.style.display='block';
+  const btn = document.getElementById('nav-'+section); if(btn) btn.classList.add('active');
+
+  if (section === 'group') { renderGroupNav(); const ib = document.getElementById('group-input-bar'); const lp = document.getElementById('group-login-prompt'); if(currentChatUser){ ib.style.display='flex'; lp.style.display='none'; } else { ib.style.display='none'; lp.style.display='block'; } }
+  if (section === 'channel') { renderChannelNav(); }
+  if (section === 'chat') { if(currentChatUser){ document.getElementById('chat-setup').style.display='none'; document.getElementById('chat-active').style.display='block'; renderDirectMsgs(); } }
+}
+
+// ============================================================
+// PRODUCTS RENDER
+// ============================================================
+function renderProducts() {
+  const grid = document.getElementById('product-grid');
+  const filtered = currentFilter === 'all' ? STATE.products : STATE.products.filter(p=>p.category===currentFilter);
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📭</div><p>Mahsulot topilmadi</p></div>'; return; }
+  grid.innerHTML = filtered.map(p => {
+    const imgHTML = p.images && p.images.length ? `<img src="${p.images[0]}" alt="${p.name}"/>` : `<span class="product-img-placeholder">${p.emoji||'📦'}</span>`;
+    const liked = likedProducts.has(p.id);
+    return `<div class="product-card" onclick="openProductDetail(${p.id})">
+      <div class="product-img">${imgHTML}
+        ${p.stock===false ? '<div class="product-badge" style="background:var(--red);color:#fff;position:absolute;top:8px;left:8px;font-size:0.6rem;padding:2px 6px;border-radius:99px">Mavjud emas</div>' : ''}
+      </div>
+      <div class="product-info">
+        <div class="product-cat">${p.category}</div>
+        <div class="product-name">${p.name}</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span class="product-price">${p.price.toLocaleString('uz-UZ')} so'm</span>
+          ${p.oldPrice ? `<span class="product-old-price">${p.oldPrice.toLocaleString('uz-UZ')}</span>` : ''}
+        </div>
+        ${STATE.config.showLikes !== false ? `<div class="product-actions" onclick="event.stopPropagation()">
+          <button class="like-btn ${liked?'liked':''}" onclick="likeProduct(${p.id})">❤️ ${p.likes||0}</button>
+          <button class="send-admin-btn" onclick="quickSendToAdmin(${p.id})">📤</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFilters() {
+  document.getElementById('filter-track').innerHTML =
+    `<button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">🛍 Barchasi</button>` +
+    STATE.config.filters.map(f=>`<button class="filter-btn ${currentFilter===f?'active':''}" onclick="setFilter('${escAttr(f)}')">${f}</button>`).join('');
+}
+
+function setFilter(cat) { currentFilter=cat; renderProducts(); renderFilters(); }
+
+// Like
+function likeProduct(id) {
+  if (likedProducts.has(id)) { likedProducts.delete(id); const p=STATE.products.find(x=>x.id===id); if(p&&p.likes>0)p.likes--; }
+  else { likedProducts.add(id); const p=STATE.products.find(x=>x.id===id); if(p)p.likes=(p.likes||0)+1; }
+  localStorage.setItem('samo_liked', JSON.stringify([...likedProducts]));
+  saveState(); renderProducts();
+}
+function likeProductDetail() {
+  if (!selectedProductId) return;
+  likeProduct(selectedProductId);
+  const p = STATE.products.find(x=>x.id===selectedProductId);
+  if(p) document.getElementById('detail-like-btn').textContent = `❤️ ${p.likes||0}`;
+}
+
+// ============================================================
+// PRODUCT DETAIL
+// ============================================================
+function openProductDetail(id) {
+  const p = STATE.products.find(x=>x.id===id); if(!p) return;
+  selectedProductId = id;
+  document.getElementById('detail-name').textContent = p.name;
+  document.getElementById('detail-emoji').textContent = p.emoji||'📦';
+  document.getElementById('detail-price').textContent = p.price.toLocaleString('uz-UZ')+' so\'m';
+  document.getElementById('detail-old-price').textContent = p.oldPrice ? p.oldPrice.toLocaleString('uz-UZ')+' so\'m' : '';
+  document.getElementById('detail-desc').textContent = p.desc||'';
+  document.getElementById('detail-cat').textContent = p.category;
+  document.getElementById('detail-like-btn').textContent = `❤️ ${p.likes||0}`;
+  const mainImg = document.getElementById('detail-main-img');
+  const thumbs = document.getElementById('detail-imgs');
+  if (p.images && p.images.length) {
+    mainImg.innerHTML = `<img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover"/>`;
+    thumbs.innerHTML = p.images.map((img,i)=>`<img src="${img}" class="product-detail-img ${i===0?'active':''}" onclick="switchDetailImg('${img}',this)" style="width:80px;height:80px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid ${i===0?'var(--accent)':'transparent'}">`).join('');
+  } else { mainImg.innerHTML = `<span style="font-size:5rem">${p.emoji||'📦'}</span>`; thumbs.innerHTML=''; }
+  openModal('product-detail-modal');
+}
+function switchDetailImg(src, el) {
+  document.getElementById('detail-main-img').innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover"/>`;
+  document.querySelectorAll('.product-detail-img').forEach(x=>x.style.borderColor='transparent');
+  el.style.borderColor='var(--accent)';
+}
+function sendProductToAdmin() {
+  if(!selectedProductId) return;
+  const p=STATE.products.find(x=>x.id===selectedProductId); if(!p) return;
+  if(!currentChatUser){ showToast('Avval chat oching','error'); closeModal('product-detail-modal'); navTo('chat'); return; }
+  const msg = { from:'user', type:'product', productId:p.id, text:`📦 ${p.name} — ${p.price.toLocaleString('uz-UZ')} so'm`, time:Date.now() };
+  if(!chats[currentUserChatId]) chats[currentUserChatId]={user:currentChatUser.name,phone:currentChatUser.phone,messages:[]};
+  chats[currentUserChatId].messages.push(msg); saveChats();
+  showToast('✅ Mahsulot adminga yuborildi','success'); closeModal('product-detail-modal'); navTo('chat'); switchUTab('direct');
+}
+function quickSendToAdmin(id) {
+  if(!currentChatUser){ showToast('Avval chatni oching','error'); navTo('chat'); return; }
+  const p=STATE.products.find(x=>x.id===id); if(!p) return;
+  const msg={from:'user',type:'product',productId:p.id,text:`📦 ${p.name} — ${p.price.toLocaleString('uz-UZ')} so'm`,time:Date.now()};
+  if(!chats[currentUserChatId]) chats[currentUserChatId]={user:currentChatUser.name,phone:currentChatUser.phone,messages:[]};
+  chats[currentUserChatId].messages.push(msg); saveChats();
+  showToast('✅ Yuborildi','success');
+}
+
+// ============================================================
+// USER CHAT
+// ============================================================
+function startUserChat() {
+  const name=document.getElementById('chat-name').value.trim();
+  const phone=document.getElementById('chat-phone').value.trim();
+  if(!name||!phone){ showToast('Ism va telefon kiriting','error'); return; }
+  currentChatUser={name,phone};
+  currentUserChatId='chat_'+phone;
+  if(!chats[currentUserChatId]) { chats[currentUserChatId]={user:name,phone,messages:[]}; saveChats(); }
+  document.getElementById('chat-setup').style.display='none';
+  document.getElementById('chat-active').style.display='block';
+  switchUTab('direct');
+  renderProductPicker();
+}
+
+function switchUTab(tab) {
+  ['direct','group','channel'].forEach(t=>{
+    document.getElementById('upanel-'+t).classList.remove('active');
+    document.getElementById('utab-'+t).classList.remove('active');
+  });
+  document.getElementById('upanel-'+tab).classList.add('active');
+  document.getElementById('utab-'+tab).classList.add('active');
+  if(tab==='direct') renderDirectMsgs();
+  if(tab==='group') renderGroupMsgs('group-msgs');
+  if(tab==='channel') renderChannelMsgsUser('channel-msgs-user');
+}
+
+function renderDirectMsgs() {
+  const el=document.getElementById('direct-msgs'); if(!el) return;
+  const chat=chats[currentUserChatId];
+  if(!chat||!chat.messages||!chat.messages.length){ el.innerHTML='<div class="empty-state"><div class="empty-icon">💬</div><p>Hali xabar yo\'q</p></div>'; return; }
+  el.innerHTML=chat.messages.map(m=>msgHTML(m, m.from==='user'?'self':'admin', m.from==='user'?currentChatUser.name:'Admin')).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function renderGroupMsgs(elId) {
+  const el=document.getElementById(elId); if(!el) return;
+  if(!groupMessages.length){ el.innerHTML='<div class="empty-state"><div class="empty-icon">👥</div><p>Guruh bo\'sh</p></div>'; return; }
+  el.innerHTML=groupMessages.map(m=>{
+    const isSelf = currentChatUser && m.userId===currentUserChatId;
+    return msgHTML(m, isSelf?'self':'other', m.userName||'Foydalanuvchi');
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function renderChannelMsgsUser(elId) {
+  const el=document.getElementById(elId); if(!el) return;
+  if(!channelPosts.length){ el.innerHTML='<div class="empty-state"><div class="empty-icon">📢</div><p>Hali post yo\'q</p></div>'; return; }
+  el.innerHTML=channelPosts.map(p=>channelPostHTML(p)).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function renderGroupNav() {
+  const el=document.getElementById('group-msgs-main'); if(!el) return;
+  renderGroupMsgs('group-msgs-main');
+}
+function renderChannelNav() {
+  const el=document.getElementById('channel-msgs-main'); if(!el) return;
+  renderChannelMsgsUser('channel-msgs-main');
+}
+
+function msgHTML(m, cls, sender) {
+  const time = new Date(m.time).toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+  let content = m.text||'';
+  if(m.type==='product') {
+    const p = STATE.products.find(x=>x.id===m.productId);
+    const imgHTML = p && p.images && p.images.length ? `<img src="${p.images[0]}" style="width:60px;height:60px;border-radius:8px;object-fit:cover;float:left;margin-right:10px">` : `<span style="font-size:2rem;float:left;margin-right:10px">${p?p.emoji:'📦'}</span>`;
+    content = `<div style="overflow:hidden">${imgHTML}<div><strong>${p?p.name:'Mahsulot'}</strong><br><span style="color:var(--green);font-size:0.85rem">${p?p.price.toLocaleString('uz-UZ')+' so\'m':''}</span></div></div>`;
+  }
+  if(m.mediaUrl) content += `<br><img src="${m.mediaUrl}" class="msg-media">`;
+  return `<div class="msg ${cls}"><div class="msg-meta">${sender}</div>${content}<div class="msg-time">${time}</div></div>`;
+}
+
+function channelPostHTML(post) {
+  let content=`<div class="msg channel-post"><div class="msg-meta" style="color:var(--blue)">📢 Admin</div>${post.text||''}`;
+  if(post.mediaUrl) content+=`<br><img src="${post.mediaUrl}" class="msg-media">`;
+  content+=`<div class="msg-time">${new Date(post.time).toLocaleString('uz-UZ')}</div></div>`;
+  return content;
+}
+
+function sendDirectMsg() {
+  const inp=document.getElementById('direct-input');
+  const text=inp.value.trim(); if(!text) return;
+  chats[currentUserChatId].messages.push({from:'user',text,time:Date.now()});
+  saveChats(); inp.value=''; renderDirectMsgs();
+  document.getElementById('product-picker').style.display='none';
+}
+
+function sendGroupMsg() {
+  const inp=document.getElementById('group-input');
+  const text=inp.value.trim(); if(!text||!currentChatUser) return;
+  groupMessages.push({userId:currentUserChatId,userName:currentChatUser.name,text,time:Date.now()});
+  saveGroup(); inp.value=''; renderGroupMsgs('group-msgs');
+}
+function sendGroupMain() {
+  const inp=document.getElementById('group-main-input');
+  const text=inp.value.trim(); if(!text||!currentChatUser) return;
+  groupMessages.push({userId:currentUserChatId,userName:currentChatUser.name,text,time:Date.now()});
+  saveGroup(); inp.value=''; renderGroupMsgs('group-msgs-main');
+}
+
+// Product picker in chat
+function toggleProductPicker() {
+  const pp=document.getElementById('product-picker');
+  pp.style.display = pp.style.display==='none' ? 'block' : 'none';
+}
+function renderProductPicker() {
+  document.getElementById('product-picker-list').innerHTML = STATE.products.map(p=>`
+    <div class="product-search-item" onclick="sendProductFromPicker(${p.id})">
+      ${p.images&&p.images.length?`<img src="${p.images[0]}">`:`<span class="emoji">${p.emoji||'📦'}</span>`}
+      <div><div style="font-size:0.82rem;font-weight:600">${p.name}</div><div style="font-size:0.72rem;color:var(--green)">${p.price.toLocaleString('uz-UZ')} so'm</div></div>
+    </div>`).join('');
+}
+function filterProductPicker() {
+  const q=document.getElementById('product-search-input').value.toLowerCase();
+  const filtered=STATE.products.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q));
+  document.getElementById('product-picker-list').innerHTML = filtered.map(p=>`
+    <div class="product-search-item" onclick="sendProductFromPicker(${p.id})">
+      ${p.images&&p.images.length?`<img src="${p.images[0]}">`:`<span class="emoji">${p.emoji||'📦'}</span>`}
+      <div><div style="font-size:0.82rem;font-weight:600">${p.name}</div><div style="font-size:0.72rem;color:var(--green)">${p.price.toLocaleString('uz-UZ')} so'm</div></div>
+    </div>`).join('');
+}
+function sendProductFromPicker(id) {
+  const p=STATE.products.find(x=>x.id===id); if(!p||!currentChatUser) return;
+  const msg={from:'user',type:'product',productId:p.id,text:`📦 ${p.name}`,time:Date.now()};
+  chats[currentUserChatId].messages.push(msg); saveChats(); renderDirectMsgs();
+  document.getElementById('product-picker').style.display='none';
+  showToast('✅ Yuborildi','success');
+}
+
+// ============================================================
+// ADMIN PANEL
+// ============================================================
+function openAdminPanel() { openModal('admin-login-modal'); document.getElementById('admin-login-input').value=''; document.getElementById('admin-pass-input').value=''; }
+function tryAdminLogin() {
+  const u=document.getElementById('admin-login-input').value.trim();
+  const p=document.getElementById('admin-pass-input').value.trim();
+  if(u===STATE.config.adminUser && p===STATE.config.adminPass) {
+    closeModal('admin-login-modal'); openModal('admin-panel-modal');
+    switchTab('admin','products'); renderAdminProducts(); updateAdminStats();
+  } else { showToast('❌ Login yoki parol xato','error'); }
+}
+function openManagerLogin() { closeModal('admin-panel-modal'); openModal('manager-login-modal'); }
+function tryManagerLogin() {
+  const u=document.getElementById('mgr-login-input').value.trim();
+  const p=document.getElementById('mgr-pass-input').value.trim();
+  if(u===STATE.config.managerUser && p===STATE.config.managerPass) {
+    closeModal('manager-login-modal'); openModal('manager-panel-modal');
+    switchMgrTab('products'); renderMgrProducts(); updateMgrStats(); loadManagerFields();
+  } else { showToast('❌ Login yoki parol xato','error'); }
+}
+
+function updateAdminStats() {
+  document.getElementById('a-stat-prods').textContent=STATE.products.length;
+  document.getElementById('a-stat-users').textContent=Object.keys(chats).length;
+  const totalMsgs=Object.values(chats).reduce((s,c)=>s+(c.messages||[]).length,0);
+  document.getElementById('a-stat-msgs').textContent=totalMsgs;
+  document.getElementById('a-stat-likes').textContent=STATE.products.reduce((s,p)=>s+(p.likes||0),0);
+}
+
+function switchTab(prefix, tab) {
+  const panels=document.querySelectorAll(`#${prefix}-panel-modal .tab-panel, #${prefix}-panel-modal .mgr-tab-panel`);
+  panels.forEach(el=>el.classList.remove('active'));
+  const tabs=document.querySelectorAll(`#${prefix}-tabs .tab`);
+  tabs.forEach(t=>t.classList.remove('active'));
+  const targetPanel=document.getElementById(`${prefix}-tab-${tab}`);
+  if(targetPanel) targetPanel.classList.add('active');
+  if(tab==='chat') { renderAdminChatList(); }
+  if(tab==='filters') { renderAdminFilters(); refreshCatBtns(); }
+  if(tab==='design') { loadDesignSettings(); }
+  if(tab==='add') { refreshCatBtns(); }
+}
+
+// Admin Products
+function renderAdminProducts() {
+  const q=(document.getElementById('admin-prod-search')||{value:''}).value.toLowerCase();
+  const filtered=STATE.products.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q));
+  const el=document.getElementById('admin-products-list'); if(!el) return;
+  if(!filtered.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><p>Mahsulot topilmadi</p></div>';return;}
+  el.innerHTML=filtered.map(p=>`
+    <div class="product-list-item">
+      <div class="product-thumb">${p.images&&p.images.length?`<img src="${p.images[0]}">`:`${p.emoji||'📦'}`}</div>
+      <div class="product-list-info">
+        <div class="product-list-name">${p.name}</div>
+        <div class="product-list-price">${p.price.toLocaleString('uz-UZ')} so'm</div>
+        <div class="product-list-meta">${p.category} · ❤️ ${p.likes||0} · ${p.stock?'✅ Bor':'❌ Yo\'q'}</div>
+      </div>
+      <div class="product-actions-bar">
+        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function addProduct() {
+  const name=document.getElementById('ap-name').value.trim();
+  const price=parseInt(document.getElementById('ap-price').value);
+  const oldPrice=parseInt(document.getElementById('ap-old-price').value)||null;
+  const desc=document.getElementById('ap-desc').value.trim();
+  const emoji=document.getElementById('ap-emoji').value||'📦';
+  const stock=document.getElementById('ap-stock').checked;
+  const cat=document.querySelector('#add-cat-btns .cat-btn.active');
+  const category=cat?cat.dataset.cat:(STATE.config.filters[0]||'');
+  if(!name||!price){ showToast('Nom va narx kiriting','error'); return; }
+  STATE.products.push({id:STATE.nextId++,name,price,oldPrice,desc,emoji,category,stock,likes:0,images:addProductImages.slice()});
+  saveState(); addProductImages=[]; document.getElementById('ap-img-preview').innerHTML='';
+  ['ap-name','ap-price','ap-old-price','ap-desc','ap-emoji'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  showToast('✅ Mahsulot qo\'shildi','success'); renderAdminProducts(); renderProducts(); updateAdminStats();
+}
+
+function deleteProduct(id) {
+  if(!confirm('O\'chirishga ishonchli?')) return;
+  STATE.products=STATE.products.filter(p=>p.id!==id); saveState();
+  renderAdminProducts(); renderMgrProducts(); renderProducts(); updateAdminStats();
+}
+
+function previewImgs(input) {
+  addProductImages=[];
+  const preview=document.getElementById('ap-img-preview'); preview.innerHTML='';
+  [...input.files].forEach((file,i)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      addProductImages.push(e.target.result);
+      preview.innerHTML+=`<div class="img-preview"><img src="${e.target.result}"><button class="rm-img" onclick="removeImg(${i})">✕</button></div>`;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function removeImg(i) { addProductImages.splice(i,1); renderImgPreview(); }
+function renderImgPreview() {
+  document.getElementById('ap-img-preview').innerHTML=addProductImages.map((img,i)=>`<div class="img-preview"><img src="${img}"><button class="rm-img" onclick="removeImg(${i})">✕</button></div>`).join('');
+}
+
+// MGR Products
+function renderMgrProducts() {
+  const q=(document.getElementById('mgr-prod-search')||{value:''}).value.toLowerCase();
+  const filtered=STATE.products.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q));
+  const el=document.getElementById('mgr-products-list'); if(!el) return;
+  if(!filtered.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><p>Mahsulot topilmadi</p></div>';return;}
+  el.innerHTML=filtered.map(p=>`
+    <div class="product-list-item">
+      <div class="product-thumb">${p.images&&p.images.length?`<img src="${p.images[0]}">`:`${p.emoji||'📦'}`}</div>
+      <div class="product-list-info">
+        <div class="product-list-name">${p.name}</div>
+        <div class="product-list-price">${p.price.toLocaleString('uz-UZ')} so'm ${p.oldPrice?`<span style="text-decoration:line-through;color:var(--text-muted);font-size:0.75rem">${p.oldPrice.toLocaleString('uz-UZ')}</span>`:''}</div>
+        <div class="product-list-meta">${p.category} · ❤️ ${p.likes||0} · ${p.stock?'✅':'❌'}</div>
+      </div>
+      <div class="product-actions-bar">
+        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function addProductMgr() {
+  const name=document.getElementById('mp-name').value.trim();
+  const price=parseInt(document.getElementById('mp-price').value);
+  const oldPrice=parseInt(document.getElementById('mp-old-price').value)||null;
+  const desc=document.getElementById('mp-desc').value.trim();
+  const emoji=document.getElementById('mp-emoji').value||'📦';
+  const stock=document.getElementById('mp-stock').checked;
+  const cat=document.querySelector('#mgr-cat-btns .cat-btn.active');
+  const category=cat?cat.dataset.cat:(STATE.config.filters[0]||'');
+  if(!name||!price){ showToast('Nom va narx kiriting','error'); return; }
+  STATE.products.push({id:STATE.nextId++,name,price,oldPrice,desc,emoji,category,stock,likes:0,images:mgrProductImages.slice()});
+  saveState(); mgrProductImages=[]; document.getElementById('mp-img-preview').innerHTML='';
+  ['mp-name','mp-price','mp-old-price','mp-desc','mp-emoji'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  showToast('✅ Mahsulot qo\'shildi','success'); renderMgrProducts(); renderAdminProducts(); renderProducts(); updateMgrStats();
+}
+function previewImgsMgr(input) {
+  mgrProductImages=[];
+  const preview=document.getElementById('mp-img-preview'); preview.innerHTML='';
+  [...input.files].forEach((file,i)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{ mgrProductImages.push(e.target.result); preview.innerHTML+=`<div class="img-preview"><img src="${e.target.result}"><button class="rm-img" onclick="removeMgrImg(${i})">✕</button></div>`; };
+    reader.readAsDataURL(file);
+  });
+}
+function removeMgrImg(i){mgrProductImages.splice(i,1);}
+
+// Cat buttons
+function refreshCatBtns() {
+  const html=STATE.config.filters.map((f,i)=>`<button class="cat-btn ${i===0?'active':''}" data-cat="${escAttr(f)}" onclick="selectCat(this,'add-cat-btns')">${f}</button>`).join('');
+  const html2=STATE.config.filters.map((f,i)=>`<button class="cat-btn ${i===0?'active':''}" data-cat="${escAttr(f)}" onclick="selectCat(this,'mgr-cat-btns')">${f}</button>`).join('');
+  const e1=document.getElementById('add-cat-btns'); if(e1) e1.innerHTML=html;
+  const e2=document.getElementById('mgr-cat-btns'); if(e2) e2.innerHTML=html2;
+}
+function selectCat(btn, containerId) {
+  document.querySelectorAll(`#${containerId} .cat-btn`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Filters
+function renderAdminFilters() {
+  const el=document.getElementById('admin-filters-list'); if(!el) return;
+  el.innerHTML=STATE.config.filters.map(f=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:6px;border:1px solid var(--border)">
+      <span>${f}</span>
+      <button class="btn btn-danger btn-sm" onclick="deleteFilter('${escAttr(f)}')">🗑</button>
+    </div>`).join('');
+}
+function addFilter() {
+  const name=document.getElementById('new-filter-input').value.trim();
+  if(!name||STATE.config.filters.includes(name)){showToast('Filter mavjud yoki bo\'sh','error');return;}
+  STATE.config.filters.push(name); saveState(); document.getElementById('new-filter-input').value='';
+  renderAdminFilters(); renderFilters(); renderProducts(); refreshCatBtns(); showToast('✅ Filter qo\'shildi','success');
+}
+function deleteFilter(name) {
+  if(!confirm('Filter va unga bog\'liq mahsulotlarni ham o\'chiramiz?')) return;
+  STATE.config.filters=STATE.config.filters.filter(f=>f!==name);
+  STATE.products=STATE.products.filter(p=>p.category!==name);
+  saveState(); renderAdminFilters(); renderMgrFilters(); renderFilters(); renderProducts(); renderAdminProducts(); renderMgrProducts(); showToast('✅ O\'chirildi','success');
+}
+function renderMgrFilters() { renderAdminFilters(); }
+
+// ============================================================
+// ADMIN CHAT
+// ============================================================
+function renderAdminChatList() {
+  const acsSec = currentAdminSection;
+  if(acsSec==='clients') {
+    document.getElementById('acs-clients-list').innerHTML=Object.entries(chats).map(([id,c])=>`
+      <div class="customer-item ${currentAdminChat===id?'active':''}" onclick="selectAdminClient('${id}')">
+        <div class="customer-name">${c.user} ${(c.messages||[]).some(m=>m.from==='user'&&!m.read)?'<span class="unread-badge">!</span>':''}</div>
+        <div class="customer-preview">${c.phone}</div>
+      </div>`).join('')||'<div style="padding:12px;font-size:0.78rem;color:var(--text-muted)">Mijoz yo\'q</div>';
+  }
+}
+function switchACS(sec) {
+  currentAdminSection=sec;
+  ['clients','group','channel'].forEach(s=>{
+    document.getElementById('acs-'+s+'-list').style.display=s==='clients'&&sec==='clients'?'block':'none';
+    const info=document.getElementById('acs-'+s+'-info'); if(info) info.style.display=s===sec&&sec!=='clients'?'block':'none';
+    document.getElementById('acst-'+s).classList.toggle('active',s===sec);
+  });
+  document.getElementById('admin-msg-bar').style.display=sec==='channel'?'none':'flex';
+  document.getElementById('admin-channel-bar').style.display=sec==='channel'?'block':'none';
+  const hdr=document.getElementById('admin-chat-header');
+  if(sec==='group') { hdr.textContent='👥 Guruh Xabarlari'; renderAdminGroupView(); }
+  if(sec==='channel') { hdr.textContent='📢 Kanal'; renderAdminChannelView(); }
+  if(sec==='clients') { hdr.textContent='Mijoz tanlang'; document.getElementById('admin-msgs-area').innerHTML=''; renderAdminChatList(); }
+}
+function selectAdminClient(id) {
+  currentAdminChat=id; renderAdminChatList();
+  document.getElementById('admin-chat-header').textContent=chats[id]?chats[id].user+' '+chats[id].phone:'';
+  const area=document.getElementById('admin-msgs-area');
+  area.innerHTML=(chats[id]?.messages||[]).map(m=>msgHTML(m,m.from==='admin'?'self':'other',m.from==='admin'?'Admin':chats[id].user)).join('');
+  area.scrollTop=area.scrollHeight;
+}
+function sendAdminReply() {
+  const inp=document.getElementById('admin-msg-input');
+  const text=inp.value.trim();
+  if(currentAdminSection==='group') { if(!text) return; groupMessages.push({userId:'admin',userName:'Admin',from:'admin',text,time:Date.now()}); saveGroup(); renderAdminGroupView(); inp.value=''; return; }
+  if(!text||!currentAdminChat){showToast('Chat tanlang','error');return;}
+  if(!chats[currentAdminChat].messages) chats[currentAdminChat].messages=[];
+  chats[currentAdminChat].messages.push({from:'admin',text,time:Date.now()});
+  saveChats(); inp.value=''; selectAdminClient(currentAdminChat);
+}
+function deleteAdminChat() {
+  if(!currentAdminChat){showToast('Chat tanlang','error');return;}
+  if(!confirm('Chatni o\'chiramiz?')) return;
+  delete chats[currentAdminChat]; saveChats(); currentAdminChat=null; renderAdminChatList(); document.getElementById('admin-msgs-area').innerHTML=''; document.getElementById('admin-chat-header').textContent='Chat tanlang';
+}
+function renderAdminGroupView() {
+  loadGroup();
+  const area=document.getElementById('admin-msgs-area');
+  area.innerHTML=groupMessages.map(m=>msgHTML(m,m.userId==='admin'?'self':'other',m.userName||'Foydalanuvchi')).join('');
+  area.scrollTop=area.scrollHeight;
+}
+function renderAdminChannelView() {
+  loadChannel();
+  const area=document.getElementById('admin-msgs-area');
+  area.innerHTML=channelPosts.map(p=>channelPostHTML(p)).join('');
+  area.scrollTop=area.scrollHeight;
+}
+function previewChannelMedia() {
+  const file=document.getElementById('admin-channel-img').files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{ channelMediaData={url:e.target.result,type:file.type}; document.getElementById('channel-media-preview').textContent='📎 '+file.name; };
+  reader.readAsDataURL(file);
+}
+function postToChannel() {
+  const text=document.getElementById('admin-channel-text').value.trim();
+  if(!text&&!channelMediaData){showToast('Post matni yoki rasm kiriting','error');return;}
+  const post={text,time:Date.now()}; if(channelMediaData) post.mediaUrl=channelMediaData.url;
+  channelPosts.push(post); saveChannel(); document.getElementById('admin-channel-text').value=''; channelMediaData=null; document.getElementById('channel-media-preview').textContent='';
+  renderAdminChannelView(); showToast('✅ Kanalga yuborildi','success');
+}
+
+// MGR Chat
+function switchMCS(sec) {
+  currentMgrSection=sec;
+  ['clients','group','channel'].forEach(s=>{
+    const el=document.getElementById('mcs-'+s+'-list'); if(el) el.style.display=s==='clients'&&sec==='clients'?'block':'none';
+    const info=document.getElementById('mcs-'+s+'-info'); if(info) info.style.display=s===sec&&sec!=='clients'?'block':'none';
+    const tab=document.getElementById('mcst-'+s); if(tab) tab.classList.toggle('active',s===sec);
+  });
+  document.getElementById('mgr-msg-bar').style.display=sec==='channel'?'none':'flex';
+  document.getElementById('mgr-channel-bar').style.display=sec==='channel'?'block':'none';
+  const hdr=document.getElementById('mgr-chat-header');
+  if(sec==='group'){hdr.textContent='👥 Guruh'; renderMgrGroupView();}
+  if(sec==='channel'){hdr.textContent='📢 Kanal'; renderMgrChannelView();}
+  if(sec==='clients'){hdr.textContent='Mijoz tanlang'; document.getElementById('mgr-msgs-area').innerHTML=''; renderMgrClientList();}
+}
+function renderMgrClientList() {
+  const el=document.getElementById('mcs-clients-list'); if(!el) return;
+  el.innerHTML=Object.entries(chats).map(([id,c])=>`
+    <div class="customer-item ${currentMgrChat===id?'active':''}" onclick="selectMgrClient('${id}')">
+      <div class="customer-name">${c.user}</div>
+      <div class="customer-preview">${c.phone}</div>
+    </div>`).join('')||'<div style="padding:12px;font-size:0.78rem;color:var(--text-muted)">Mijoz yo\'q</div>';
+}
+function selectMgrClient(id) {
+  currentMgrChat=id; renderMgrClientList();
+  document.getElementById('mgr-chat-header').textContent=chats[id]?chats[id].user:id;
+  const area=document.getElementById('mgr-msgs-area');
+  area.innerHTML=(chats[id]?.messages||[]).map(m=>msgHTML(m,m.from==='admin'?'self':'other',m.from==='admin'?'Admin':chats[id].user)).join('');
+  area.scrollTop=area.scrollHeight;
+}
+function sendMgrReply() {
+  const inp=document.getElementById('mgr-msg-input');
+  const text=inp.value.trim();
+  if(currentMgrSection==='group'){if(!text)return; groupMessages.push({userId:'admin',userName:'Boshqaruvchi',from:'admin',text,time:Date.now()}); saveGroup(); renderMgrGroupView(); inp.value=''; return;}
+  if(!text||!currentMgrChat){showToast('Chat tanlang','error');return;}
+  if(!chats[currentMgrChat].messages) chats[currentMgrChat].messages=[];
+  chats[currentMgrChat].messages.push({from:'admin',text,time:Date.now()});
+  saveChats(); inp.value=''; selectMgrClient(currentMgrChat);
+}
+function renderMgrGroupView() { loadGroup(); const area=document.getElementById('mgr-msgs-area'); area.innerHTML=groupMessages.map(m=>msgHTML(m,m.userId==='admin'?'self':'other',m.userName||'Foydalanuvchi')).join(''); area.scrollTop=area.scrollHeight; }
+function renderMgrChannelView() { loadChannel(); const area=document.getElementById('mgr-msgs-area'); area.innerHTML=channelPosts.map(p=>channelPostHTML(p)).join(''); area.scrollTop=area.scrollHeight; }
+function previewMgrChannelMedia() {
+  const file=document.getElementById('mgr-channel-img').files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{ mgrChannelMediaData={url:e.target.result,type:file.type}; document.getElementById('mgr-media-preview').textContent='📎 '+file.name; };
+  reader.readAsDataURL(file);
+}
+function postToChannelMgr() {
+  const text=document.getElementById('mgr-channel-text').value.trim();
+  if(!text&&!mgrChannelMediaData){showToast('Matn yoki fayl kiriting','error');return;}
+  const post={text,time:Date.now()}; if(mgrChannelMediaData) post.mediaUrl=mgrChannelMediaData.url;
+  channelPosts.push(post); saveChannel(); document.getElementById('mgr-channel-text').value=''; mgrChannelMediaData=null; document.getElementById('mgr-media-preview').textContent='';
+  renderMgrChannelView(); showToast('✅ Kanalga yuborildi','success');
+}
+
+// ============================================================
+// DESIGN
+// ============================================================
+function applyTheme(theme, save=true) {
+  document.body.setAttribute('data-theme', theme);
+  STATE.config.theme=theme;
+  document.querySelectorAll('.theme-card').forEach(c=>c.classList.remove('active'));
+  const tc=document.getElementById('theme-'+theme); if(tc) tc.classList.add('active');
+  if(save) saveState();
+}
+function applyLayout(layout, save=true) {
+  document.body.setAttribute('data-layout', layout);
+  STATE.config.layout=layout;
+  if(save) saveState();
+}
+function applyFontSize(sz, save=true) {
+  const sizes={small:'0.88rem',normal:'1rem',large:'1.1rem'};
+  document.documentElement.style.setProperty('--font-size-base', sizes[sz]||'1rem');
+  STATE.config.fontSize=sz;
+  if(save) saveState();
+}
+function applyCustomAccent(color) {
+  document.documentElement.style.setProperty('--accent', color);
+  document.documentElement.style.setProperty('--accent2', color);
+  STATE.config.accentColor=color;
+  saveState();
+}
+function applyAll() {
+  applyTheme(STATE.config.theme, false);
+  applyLayout(STATE.config.layout, false);
+  applyFontSize(STATE.config.fontSize, false);
+  if(STATE.config.accentColor&&STATE.config.accentColor!=='#c9a96e') applyCustomAccent(STATE.config.accentColor);
+  document.getElementById('logo').textContent = STATE.config.storeName;
+  updatePromoBar();
+}
+function saveDesignName() {
+  // Admin can't change storeName — only design stuff
+  showToast('Do\'kon nomini o\'zgartirish faqat boshqaruvchida mumkin','info');
+}
+function loadDesignSettings() {
+  const ds=document.getElementById('design-sitename'); if(ds) ds.value=STATE.config.storeName;
+}
+
+// ============================================================
+// PROMO BAR
+// ============================================================
+function updatePromoBar() {
+  const pb=document.getElementById('promo-bar');
+  if(STATE.config.showPromo && STATE.config.promo) {
+    pb.style.display='block'; pb.textContent='✨ '+STATE.config.promo;
+  } else { pb.style.display='none'; }
+}
+function togglePromoBar() { STATE.config.showPromo=document.getElementById('set-promo').checked; saveState(); updatePromoBar(); }
+function toggleLikes() { STATE.config.showLikes=document.getElementById('set-likes').checked; saveState(); renderProducts(); }
+function toggleChatNav() { STATE.config.showChat=document.getElementById('set-chat').checked; saveState(); const btn=document.getElementById('nav-chat'); if(btn) btn.style.display=STATE.config.showChat?'':'none'; }
+function toggleMaintenance() { STATE.config.maintenance=document.getElementById('set-maintenance').checked; saveState(); showToast(STATE.config.maintenance?'⚠ Sayt texnik tanaffusda':'✅ Sayt ishga tushdi','info'); }
+
+// ============================================================
+// MANAGER: Groups
+// ============================================================
+function addGroup() {
+  const name=document.getElementById('new-group-name').value.trim();
+  if(!name){showToast('Guruh nomi kiriting','error');return;}
+  if(STATE.groups.includes(name)){showToast('Bu guruh mavjud','error');return;}
+  STATE.groups.push(name); saveState(); document.getElementById('new-group-name').value='';
+  renderGroupsList(); showToast('✅ Guruh yaratildi','success'); updateMgrStats();
+}
+function renderGroupsList() {
+  const el=document.getElementById('mgr-groups-list'); if(!el) return;
+  el.innerHTML=STATE.groups.map((g,i)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:8px;border:1px solid var(--border)">
+      <span style="font-weight:600">👥 ${g}</span>
+      ${i>0?`<button class="btn btn-danger btn-sm" onclick="deleteGroup(${i})">🗑 O'chirish</button>`:'<span style="font-size:0.72rem;color:var(--text-muted)">Asosiy guruh</span>'}
+    </div>`).join('');
+}
+function deleteGroup(i) {
+  if(!confirm('Guruhni o\'chiramiz?')) return;
+  STATE.groups.splice(i,1); saveState(); renderGroupsList(); showToast('✅ Guruh o\'chirildi','success');
+}
+
+// ============================================================
+// MANAGER: Site Info
+// ============================================================
+function loadManagerFields() {
+  const fields=['storename','phone','telegram','instagram','map','about','promo'];
+  fields.forEach(f=>{ const el=document.getElementById('mgr-'+f); if(el) el.value=STATE.config[f==='storename'?'storeName':f]||''; });
+  const cu=document.getElementById('cred-admin-user'); if(cu) cu.value=STATE.config.adminUser;
+  const cp=document.getElementById('cred-admin-pass'); if(cp) cp.value='';
+  const mu=document.getElementById('cred-mgr-user'); if(mu) mu.value=STATE.config.managerUser;
+  const mp=document.getElementById('cred-mgr-pass'); if(mp) mp.value='';
+  document.getElementById('set-promo').checked=!!STATE.config.showPromo;
+  document.getElementById('set-likes').checked=STATE.config.showLikes!==false;
+  document.getElementById('set-chat').checked=STATE.config.showChat!==false;
+  document.getElementById('set-maintenance').checked=!!STATE.config.maintenance;
+  const st=document.getElementById('seo-title'); if(st) st.value=STATE.config.seoTitle||'';
+  const sd=document.getElementById('seo-desc'); if(sd) sd.value=STATE.config.seoDesc||'';
+  const sk=document.getElementById('seo-keywords'); if(sk) sk.value=STATE.config.seoKeywords||'';
+  updateCloudSizes(); renderGroupsList(); renderAds(); renderAdminsMgr(); renderUsersMgr(); renderSectionsList(); renderNotifications();
+}
+function saveSiteInfo() {
+  STATE.config.storeName=document.getElementById('mgr-storename').value;
+  STATE.config.phone=document.getElementById('mgr-phone').value;
+  STATE.config.telegram=document.getElementById('mgr-telegram').value;
+  STATE.config.instagram=document.getElementById('mgr-instagram').value;
+  STATE.config.map=document.getElementById('mgr-map').value;
+  STATE.config.about=document.getElementById('mgr-about').value;
+  STATE.config.promo=document.getElementById('mgr-promo').value;
+  saveState(); document.getElementById('logo').textContent=STATE.config.storeName; updatePromoBar();
+  showToast('✅ Sayt ma\'lumotlari saqlandi','success');
+}
+
+// ============================================================
+// MANAGER: Credentials
+// ============================================================
+function saveCreds(type) {
+  if(type==='admin') {
+    const u=document.getElementById('cred-admin-user').value.trim();
+    const p=document.getElementById('cred-admin-pass').value.trim();
+    if(!u){showToast('Login kiriting','error');return;}
+    STATE.config.adminUser=u; if(p) STATE.config.adminPass=p;
+  } else {
+    const u=document.getElementById('cred-mgr-user').value.trim();
+    const p=document.getElementById('cred-mgr-pass').value.trim();
+    if(!u){showToast('Login kiriting','error');return;}
+    STATE.config.managerUser=u; if(p) STATE.config.managerPass=p;
+  }
+  saveState(); showToast('✅ Login/Parol o\'zgartirildi','success');
+}
+
+// ============================================================
+// MANAGER: Ads
+// ============================================================
+function previewAdImg(input) {
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{ adData.img=e.target.result; document.getElementById('ad-img-preview').innerHTML=`<img src="${e.target.result}" style="max-height:80px;border-radius:8px;">`; };
+  reader.readAsDataURL(file);
+}
+function addAd() {
+  const text=document.getElementById('ad-text').value.trim();
+  const link=document.getElementById('ad-link').value.trim();
+  if(!text){showToast('Reklama matni kiriting','error');return;}
+  if(!STATE.config.ads) STATE.config.ads=[];
+  STATE.config.ads.push({text,link,img:adData.img||null,showPromo:document.getElementById('ad-promo-bar').checked,showPopup:document.getElementById('ad-popup').checked,time:Date.now()});
+  saveState(); adData.img=null; document.getElementById('ad-text').value=''; document.getElementById('ad-link').value=''; document.getElementById('ad-img-preview').innerHTML='';
+  renderAds(); updateMgrStats(); showToast('✅ Reklama qo\'shildi','success');
+}
+function renderAds() {
+  const el=document.getElementById('ads-list'); if(!el) return;
+  const ads=STATE.config.ads||[];
+  if(!ads.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📣</div><p>Reklama yo\'q</p></div>';return;}
+  el.innerHTML=ads.map((ad,i)=>`
+    <div class="ad-card">
+      ${ad.img?`<img src="${ad.img}" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:8px">`:'' }
+      <strong style="font-size:0.85rem">${ad.text}</strong>
+      ${ad.link?`<a href="${ad.link}" target="_blank" style="font-size:0.72rem;color:var(--blue);display:block;margin-top:4px">${ad.link}</a>`:''}
+      <div style="margin-top:8px"><button class="btn btn-danger btn-sm" onclick="deleteAd(${i})">🗑 O'chirish</button></div>
+    </div>`).join('');
+}
+function deleteAd(i) { STATE.config.ads.splice(i,1); saveState(); renderAds(); }
+
+// ============================================================
+// MANAGER: Users
+// ============================================================
+function renderUsersMgr() {
+  const el=document.getElementById('mgr-users-list'); if(!el) return;
+  const entries=Object.entries(chats);
+  if(!entries.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">👤</div><p>Foydalanuvchi yo\'q</p></div>';return;}
+  el.innerHTML=entries.map(([id,c])=>`
+    <div style="padding:12px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:8px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <strong>${c.user}</strong><br>
+        <span style="font-size:0.75rem;color:var(--text-muted)">${c.phone}</span><br>
+        <span style="font-size:0.72rem;color:var(--text-muted)">Xabarlar: ${(c.messages||[]).length}</span>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="deleteUser('${id}')">🗑</button>
+    </div>`).join('');
+}
+function deleteUser(id) { if(!confirm('Foydalanuvchini o\'chiramiz?')) return; delete chats[id]; saveChats(); renderUsersMgr(); updateMgrStats(); }
+
+// ============================================================
+// MANAGER: Admins
+// ============================================================
+function renderAdminsMgr() {
+  const el=document.getElementById('admin-list-mgr'); if(!el) return;
+  el.innerHTML=STATE.admins.map((a,i)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:6px;border:1px solid var(--border)">
+      <span>👨‍💼 ${a.user}</span>
+      ${i===0?'<span style="font-size:0.7rem;color:var(--text-muted)">Asosiy admin</span>':`<button class="btn btn-danger btn-sm" onclick="removeAdmin(${i})">🗑</button>`}
+    </div>`).join('');
+}
+function addAdmin() {
+  const u=document.getElementById('new-admin-user').value.trim();
+  const p=document.getElementById('new-admin-pass').value.trim();
+  if(!u||!p){showToast('Login va parol kiriting','error');return;}
+  if(!STATE.admins) STATE.admins=[];
+  STATE.admins.push({user:u,pass:p}); saveState();
+  document.getElementById('new-admin-user').value=''; document.getElementById('new-admin-pass').value='';
+  renderAdminsMgr(); showToast('✅ Admin qo\'shildi','success');
+}
+function removeAdmin(i) { if(!confirm('Adminni o\'chiramiz?')) return; STATE.admins.splice(i,1); saveState(); renderAdminsMgr(); }
+
+// ============================================================
+// MANAGER: Analytics
+// ============================================================
+function renderAnalytics() {
+  const totalMsgs=Object.values(chats).reduce((s,c)=>s+(c.messages||[]).length,0);
+  const totalLikes=STATE.products.reduce((s,p)=>s+(p.likes||0),0);
+  document.getElementById('an-prods').textContent=STATE.products.length;
+  document.getElementById('an-users').textContent=Object.keys(chats).length;
+  document.getElementById('an-msgs').textContent=totalMsgs;
+  document.getElementById('an-likes').textContent=totalLikes;
+  document.getElementById('an-channel').textContent=channelPosts.length;
+  document.getElementById('an-groups').textContent=(STATE.groups||[]).length;
+  const topLiked=[...STATE.products].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,5);
+  document.getElementById('top-liked-list').innerHTML=topLiked.map(p=>`
+    <div style="display:flex;justify-content:space-between;padding:8px;border-radius:8px;background:rgba(255,255,255,0.04);margin-bottom:6px">
+      <span>${p.emoji||'📦'} ${p.name}</span><span style="color:var(--red)">❤️ ${p.likes||0}</span>
+    </div>`).join('');
+}
+
+// ============================================================
+// MANAGER: SEO
+// ============================================================
+function saveSEO() {
+  STATE.config.seoTitle=document.getElementById('seo-title').value;
+  STATE.config.seoDesc=document.getElementById('seo-desc').value;
+  STATE.config.seoKeywords=document.getElementById('seo-keywords').value;
+  document.title=STATE.config.seoTitle||'SAMO'; saveState(); showToast('✅ SEO saqlandi','success');
+}
+
+// ============================================================
+// MANAGER: Notifications
+// ============================================================
+function sendNotification() {
+  const title=document.getElementById('notif-title').value.trim();
+  const text=document.getElementById('notif-text').value.trim();
+  if(!title||!text){showToast('Sarlavha va matn kiriting','error');return;}
+  const notif={title,text,time:Date.now(),channel:document.getElementById('notif-channel').checked,group:document.getElementById('notif-group').checked,popup:document.getElementById('notif-popup').checked};
+  if(notif.channel) { channelPosts.push({text:`🔔 ${title}\n${text}`,time:Date.now()}); saveChannel(); }
+  if(notif.group) { groupMessages.push({userId:'admin',userName:'Admin',from:'admin',text:`🔔 ${title}: ${text}`,time:Date.now()}); saveGroup(); }
+  if(!STATE.notifications) STATE.notifications=[];
+  STATE.notifications.unshift(notif); saveState();
+  document.getElementById('notif-title').value=''; document.getElementById('notif-text').value='';
+  renderNotifications(); showToast('🔔 Xabarnoma yuborildi','success');
+}
+function renderNotifications() {
+  const el=document.getElementById('notifications-list'); if(!el) return;
+  const notifs=STATE.notifications||[];
+  if(!notifs.length){el.innerHTML='<div style="color:var(--text-muted);font-size:0.8rem">Hali xabarnoma yo\'q</div>';return;}
+  el.innerHTML=notifs.slice(0,10).map(n=>`
+    <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:6px;border:1px solid var(--border)">
+      <strong style="font-size:0.82rem">🔔 ${n.title}</strong><br>
+      <span style="font-size:0.78rem;color:var(--text-secondary)">${n.text}</span><br>
+      <span style="font-size:0.68rem;color:var(--text-muted)">${new Date(n.time).toLocaleString('uz-UZ')}</span>
+    </div>`).join('');
+}
+
+// ============================================================
+// MANAGER: Sections
+// ============================================================
+function renderSectionsList() {
+  const el=document.getElementById('sections-list'); if(!el) return;
+  const secs=STATE.config.sections||[];
+  if(!secs.length){el.innerHTML='<div style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px">Bo\'limlar yo\'q</div>';return;}
+  el.innerHTML=secs.map((s,i)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:6px;border:1px solid var(--border)">
+      <span>🧩 ${s.name} <span style="font-size:0.72rem;color:var(--text-muted)">(${s.type})</span></span>
+      <button class="btn btn-danger btn-sm" onclick="deleteSection(${i})">🗑</button>
+    </div>`).join('');
+}
+function addSection() {
+  const name=document.getElementById('new-section-name').value.trim();
+  const type=document.getElementById('new-section-type').value;
+  if(!name){showToast('Bo\'lim nomi kiriting','error');return;}
+  if(!STATE.config.sections) STATE.config.sections=[];
+  STATE.config.sections.push({name,type}); saveState(); document.getElementById('new-section-name').value='';
+  renderSectionsList(); showToast('✅ Bo\'lim qo\'shildi','success');
+}
+function deleteSection(i) { STATE.config.sections.splice(i,1); saveState(); renderSectionsList(); }
+
+// ============================================================
+// MANAGER: Backup
+// ============================================================
+function exportData(type) {
+  let data, fname;
+  if(type==='all') { data={STATE,chats,channelPosts,groupMessages}; fname='samo_backup_all.json'; }
+  else if(type==='products') { data=STATE.products; fname='samo_products.json'; }
+  else { data=chats; fname='samo_chats.json'; }
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname; a.click();
+}
+function importData(input) {
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try {
+      const d=JSON.parse(e.target.result);
+      if(d.STATE) { STATE=deepMerge(STATE,d.STATE); saveState(); }
+      if(d.chats) { chats=d.chats; saveChats(); }
+      if(d.channelPosts) { channelPosts=d.channelPosts; saveChannel(); }
+      if(d.groupMessages) { groupMessages=d.groupMessages; saveGroup(); }
+      applyAll(); renderProducts(); renderFilters(); showToast('✅ Ma\'lumotlar yuklandi','success');
+    } catch(err) { showToast('❌ Fayl xato formatda','error'); }
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
+// MANAGER: Stats
+// ============================================================
+function updateMgrStats() {
+  const el1=document.getElementById('m-stat-prods'); if(el1) el1.textContent=STATE.products.length;
+  const el2=document.getElementById('m-stat-users'); if(el2) el2.textContent=Object.keys(chats).length;
+  const el3=document.getElementById('m-stat-groups'); if(el3) el3.textContent=(STATE.groups||[]).length;
+  const el4=document.getElementById('m-stat-ads'); if(el4) el4.textContent=(STATE.config.ads||[]).length;
+}
+
+function switchMgrTab(tab) {
+  document.querySelectorAll('#manager-panel-modal .mgr-tab-panel').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('#mgr-tabs .tab').forEach(t=>t.classList.remove('active'));
+  const panel=document.getElementById('mgr-tab-'+tab); if(panel) panel.classList.add('active');
+  event.target.classList.add('active');
+
+  if(tab==='analytics') renderAnalytics();
+  if(tab==='users') renderUsersMgr();
+  if(tab==='groups') renderGroupsList();
+  if(tab==='admins') renderAdminsMgr();
+  if(tab==='ads') renderAds();
+  if(tab==='cloud') updateCloudSizes();
+  if(tab==='products') renderMgrProducts();
+  if(tab==='chat') { renderMgrClientList(); switchMCS('clients'); }
+  if(tab==='add') refreshCatBtns();
+  if(tab==='notify') renderNotifications();
+  if(tab==='sections') renderSectionsList();
+}
+
+// ============================================================
+// Settings: Clear
+// ============================================================
+function clearAllData() {
+  if(!confirm('BARCHA ma\'lumotlar o\'chadi! Davom etamizmi?')) return;
+  if(!confirm('Haqiqatan ham barchasi o\'chiriladi. Ishonchsizmi?')) return;
+  localStorage.clear(); location.reload();
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('.modal-overlay').forEach(ov=>{
+  ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('active'); });
+});
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type='') {
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  el.innerHTML=msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(()=>{el.style.animation='toastIn 0.3s ease reverse';setTimeout(()=>el.remove(),300);},3000);
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function escAttr(s) { return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+function fmtSize(bytes) { if(bytes<1024) return bytes+'B'; return (bytes/1024).toFixed(1)+'KB'; }
+
+// Attach logo click
+document.getElementById('logo').addEventListener('click', openAdminPanel);
+
+// Click outside product picker to close
+document.addEventListener('click', e=>{ const pp=document.getElementById('product-picker'); if(pp&&!pp.contains(e.target)&&!e.target.closest('[onclick="toggleProductPicker()"]')) pp.style.display='none'; });
+</script>
+</body>
+</html>
