@@ -408,6 +408,7 @@ main { padding:20px 5%; }
     <button class="header-btn" id="nav-chat" onclick="navTo('chat')">💬 Chat</button>
     <button class="header-btn" id="nav-channel" onclick="navTo('channel')">📢 Kanal</button>
     <button class="header-btn" id="nav-group" onclick="navTo('group')">👥 Guruh</button>
+    <button class="header-btn" id="nav-aloqa" onclick="navTo('aloqa')">📞 Aloqa</button>
   </div>
 </header>
 
@@ -496,6 +497,14 @@ main { padding:20px 5%; }
       <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-weight:600;color:var(--blue)">📢 Kanal</div>
       <div class="messages-area" id="channel-msgs-main" style="height:400px"></div>
       <div class="channel-readonly">📢 Faqat admin va boshqaruvchi post qo'ya oladi</div>
+    </div>
+  </section>
+
+  <!-- ===== ALOQA SECTION ===== -->
+  <section id="section-aloqa" style="display:none">
+    <div style="max-width:600px;margin:0 auto">
+      <h2 class="section-heading" style="margin-bottom:24px">📞 Biz bilan bog'laning</h2>
+      <div id="aloqa-content" style="display:grid;gap:14px"></div>
     </div>
   </section>
 
@@ -1043,7 +1052,7 @@ const GROUP_KEY = 'samo_group_v4';
 
 const JSONBIN = {
   binId: '6a217c87da38895dfe86a554',
-  token: '$2a$10$Uy/g0P0NnKhmt1.nem9huONtpxrdoaRD9JUmI.2TrpwLJGy5mAGNm'
+  token: '$2a$10$aojT/pSC1A0ASBgFp98sxOGNn/9J9duiGwrDMzWY2QVlTVREnhOY'
 };
 
 let STATE = {
@@ -1193,7 +1202,7 @@ function updateCloudSizes() {
 // NAVIGATION
 // ============================================================
 function navTo(section) {
-  ['products','chat','group','channel'].forEach(s => {
+  ['products','chat','group','channel','aloqa'].forEach(s => {
     const el = document.getElementById('section-'+s); if(el) el.style.display = 'none';
     const btn = document.getElementById('nav-'+s); if(btn) btn.classList.remove('active');
   });
@@ -1202,12 +1211,34 @@ function navTo(section) {
 
   if (section === 'group') { renderGroupNav(); const ib = document.getElementById('group-input-bar'); const lp = document.getElementById('group-login-prompt'); if(currentChatUser){ ib.style.display='flex'; lp.style.display='none'; } else { ib.style.display='none'; lp.style.display='block'; } }
   if (section === 'channel') { renderChannelNav(); }
-  if (section === 'chat') { if(currentChatUser){ document.getElementById('chat-setup').style.display='none'; document.getElementById('chat-active').style.display='block'; renderDirectMsgs(); } }
+  if (section === 'chat') {
+    if(currentChatUser){
+      document.getElementById('chat-setup').style.display='none';
+      document.getElementById('chat-active').style.display='block';
+      switchUTab('direct');
+    } else {
+      document.getElementById('chat-setup').style.display='block';
+      document.getElementById('chat-active').style.display='none';
+    }
+  }
+  if (section === 'aloqa') { renderAloqa(); }
 }
 
 // ============================================================
-// PRODUCTS RENDER
+// ALOQA (CONTACT) RENDER
 // ============================================================
+function renderAloqa() {
+  const el = document.getElementById('aloqa-content'); if(!el) return;
+  const c = STATE.config;
+  const items = [];
+  if(c.phone) items.push(`<a href="tel:${c.phone}" style="text-decoration:none"><div class="user-chat-wrapper" style="padding:18px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:2rem">📱</div><div><div style="font-weight:700;font-size:1rem">Telefon</div><div style="color:var(--accent);font-size:0.9rem;margin-top:2px">${c.phone}</div></div></div></a>`);
+  if(c.telegram) items.push(`<a href="${c.telegram}" target="_blank" style="text-decoration:none"><div class="user-chat-wrapper" style="padding:18px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:2rem">✈️</div><div><div style="font-weight:700;font-size:1rem">Telegram</div><div style="color:var(--blue);font-size:0.9rem;margin-top:2px">${c.telegram}</div></div></div></a>`);
+  if(c.instagram) items.push(`<a href="${c.instagram}" target="_blank" style="text-decoration:none"><div class="user-chat-wrapper" style="padding:18px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='#e040fb'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:2rem">📸</div><div><div style="font-weight:700;font-size:1rem">Instagram</div><div style="color:#e040fb;font-size:0.9rem;margin-top:2px">${c.instagram}</div></div></div></a>`);
+  if(c.map) items.push(`<a href="${c.map}" target="_blank" style="text-decoration:none"><div class="user-chat-wrapper" style="padding:18px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:2rem">📍</div><div><div style="font-weight:700;font-size:1rem">Manzil (Google Maps)</div><div style="color:var(--green);font-size:0.85rem;margin-top:2px">Xaritada ko'rish →</div></div></div></a>`);
+  if(c.about) items.push(`<div class="user-chat-wrapper" style="padding:18px"><div style="font-size:1.5rem;margin-bottom:8px">ℹ️</div><div style="font-weight:700;margin-bottom:6px">Biz haqimizda</div><div style="color:var(--text-secondary);font-size:0.88rem;line-height:1.6">${c.about}</div></div>`);
+  if(!items.length) { el.innerHTML='<div class="empty-state"><div class="empty-icon">📞</div><p>Aloqa ma\'lumotlari hali kiritilmagan</p><p style="margin-top:8px;font-size:0.78rem">Boshqaruvchi panelida "Sayt" bo\'limidan kiriting</p></div>'; return; }
+  el.innerHTML = items.join('');
+}
 function renderProducts() {
   const grid = document.getElementById('product-grid');
   const filtered = currentFilter === 'all' ? STATE.products : STATE.products.filter(p=>p.category===currentFilter);
@@ -1268,7 +1299,7 @@ function openProductDetail(id) {
   document.getElementById('detail-price').textContent = p.price.toLocaleString('uz-UZ')+' so\'m';
   document.getElementById('detail-old-price').textContent = p.oldPrice ? p.oldPrice.toLocaleString('uz-UZ')+' so\'m' : '';
   document.getElementById('detail-desc').textContent = p.desc||'';
-  document.getElementById('detail-cat').textContent = p.category;
+  document.getElementById('detail-cat').textContent = p.category + (p.stock === false ? '  ❌ Mavjud emas' : '  ✅ Mavjud');
   document.getElementById('detail-like-btn').textContent = `❤️ ${p.likes||0}`;
   const mainImg = document.getElementById('detail-main-img');
   const thumbs = document.getElementById('detail-imgs');
@@ -1276,7 +1307,10 @@ function openProductDetail(id) {
     mainImg.innerHTML = `<img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover"/>`;
     thumbs.innerHTML = p.images.map((img,i)=>`<img src="${img}" class="product-detail-img ${i===0?'active':''}" onclick="switchDetailImg('${img}',this)" style="width:80px;height:80px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid ${i===0?'var(--accent)':'transparent'}">`).join('');
   } else { mainImg.innerHTML = `<span style="font-size:5rem">${p.emoji||'📦'}</span>`; thumbs.innerHTML=''; }
-  openModal('product-detail-modal');
+  // Always open fresh
+  const modal = document.getElementById('product-detail-modal');
+  modal.classList.remove('active');
+  setTimeout(()=>modal.classList.add('active'), 10);
 }
 function switchDetailImg(src, el) {
   document.getElementById('detail-main-img').innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover"/>`;
@@ -1376,7 +1410,8 @@ function msgHTML(m, cls, sender) {
 }
 
 function channelPostHTML(post) {
-  let content=`<div class="msg channel-post"><div class="msg-meta" style="color:var(--blue)">📢 Admin</div>${post.text||''}`;
+  const senderLabel = post.from === 'manager' ? '⚙️ MHDV' : '📢 Admin';
+  let content=`<div class="msg channel-post"><div class="msg-meta" style="color:var(--blue)">${senderLabel}</div>${post.text||''}`;
   if(post.mediaUrl) content+=`<br><img src="${post.mediaUrl}" class="msg-media">`;
   content+=`<div class="msg-time">${new Date(post.time).toLocaleString('uz-UZ')}</div></div>`;
   return content;
@@ -1490,6 +1525,7 @@ function renderAdminProducts() {
         <div class="product-list-meta">${p.category} · ❤️ ${p.likes||0} · ${p.stock?'✅ Bor':'❌ Yo\'q'}</div>
       </div>
       <div class="product-actions-bar">
+        <button class="btn btn-sm ${p.stock?'btn-danger':'btn-green'}" onclick="toggleStock(${p.id})" title="${p.stock?'Mavjud emas qilish':'Mavjud qilish'}">${p.stock?'❌':'✅'}</button>
         <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑</button>
       </div>
     </div>`).join('');
@@ -1684,7 +1720,7 @@ function previewChannelMedia() {
 function postToChannel() {
   const text=document.getElementById('admin-channel-text').value.trim();
   if(!text&&!channelMediaData){showToast('Post matni yoki rasm kiriting','error');return;}
-  const post={text,time:Date.now()}; if(channelMediaData) post.mediaUrl=channelMediaData.url;
+  const post={text,time:Date.now(),from:'admin'}; if(channelMediaData) post.mediaUrl=channelMediaData.url;
   channelPosts.push(post); saveChannel(); document.getElementById('admin-channel-text').value=''; channelMediaData=null; document.getElementById('channel-media-preview').textContent='';
   renderAdminChannelView(); showToast('✅ Kanalga yuborildi','success');
 }
@@ -1739,7 +1775,7 @@ function previewMgrChannelMedia() {
 function postToChannelMgr() {
   const text=document.getElementById('mgr-channel-text').value.trim();
   if(!text&&!mgrChannelMediaData){showToast('Matn yoki fayl kiriting','error');return;}
-  const post={text,time:Date.now()}; if(mgrChannelMediaData) post.mediaUrl=mgrChannelMediaData.url;
+  const post={text,time:Date.now(),from:'manager'}; if(mgrChannelMediaData) post.mediaUrl=mgrChannelMediaData.url;
   channelPosts.push(post); saveChannel(); document.getElementById('mgr-channel-text').value=''; mgrChannelMediaData=null; document.getElementById('mgr-media-preview').textContent='';
   renderMgrChannelView(); showToast('✅ Kanalga yuborildi','success');
 }
@@ -1983,7 +2019,7 @@ function sendNotification() {
   const text=document.getElementById('notif-text').value.trim();
   if(!title||!text){showToast('Sarlavha va matn kiriting','error');return;}
   const notif={title,text,time:Date.now(),channel:document.getElementById('notif-channel').checked,group:document.getElementById('notif-group').checked,popup:document.getElementById('notif-popup').checked};
-  if(notif.channel) { channelPosts.push({text:`🔔 ${title}\n${text}`,time:Date.now()}); saveChannel(); }
+  if(notif.channel) { channelPosts.push({text:`🔔 ${title}\n${text}`,time:Date.now(),from:'manager'}); saveChannel(); }
   if(notif.group) { groupMessages.push({userId:'admin',userName:'Admin',from:'admin',text:`🔔 ${title}: ${text}`,time:Date.now()}); saveGroup(); }
   if(!STATE.notifications) STATE.notifications=[];
   STATE.notifications.unshift(notif); saveState();
